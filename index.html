@@ -1,1 +1,248 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test LIFF アプリ</title>
+    <style>
+        body {
+            font-family: 'Hiragino Sans', 'ヒラギノ角ゴシック', sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: white;
+        }
+        
+        .container {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
+            max-width: 400px;
+            width: 100%;
+            text-align: center;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+        
+        h1 {
+            margin-bottom: 30px;
+            font-size: 24px;
+            font-weight: 300;
+        }
+        
+        .user-info {
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 15px;
+            padding: 20px;
+            margin: 20px 0;
+            display: none;
+        }
+        
+        .user-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            margin: 0 auto 15px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+        }
+        
+        .user-name {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        
+        .user-id {
+            font-size: 12px;
+            opacity: 0.8;
+            word-break: break-all;
+        }
+        
+        .btn {
+            background: rgba(255, 255, 255, 0.2);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 10px;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(5px);
+        }
+        
+        .btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+        }
+        
+        .status {
+            margin: 20px 0;
+            padding: 10px;
+            border-radius: 10px;
+            font-size: 14px;
+        }
+        
+        .status.loading {
+            background: rgba(255, 193, 7, 0.2);
+            border: 1px solid rgba(255, 193, 7, 0.5);
+        }
+        
+        .status.success {
+            background: rgba(40, 167, 69, 0.2);
+            border: 1px solid rgba(40, 167, 69, 0.5);
+        }
+        
+        .status.error {
+            background: rgba(220, 53, 69, 0.2);
+            border: 1px solid rgba(220, 53, 69, 0.5);
+        }
+        
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🚀 LIFF テストアプリ</h1>
+        
+        <div id="status" class="status loading">
+            LIFF初期化中...
+        </div>
+        
+        <div id="user-info" class="user-info">
+            <img id="user-avatar" class="user-avatar" src="" alt="ユーザーアバター">
+            <div id="user-name" class="user-name"></div>
+            <div id="user-id" class="user-id"></div>
+        </div>
+        
+        <div id="controls" class="hidden">
+            <button class="btn" onclick="getUserProfile()">
+                👤 プロフィール取得
+            </button>
+            <button class="btn" onclick="closeApp()">
+                ❌ アプリを閉じる
+            </button>
+            <button class="btn" onclick="shareApp()">
+                📤 アプリをシェア
+            </button>
+        </div>
+        
+        <div id="debug-info" style="margin-top: 20px; font-size: 12px; opacity: 0.7;">
+            <p>環境: <span id="liff-context"></span></p>
+            <p>バージョン: <span id="liff-version"></span></p>
+        </div>
+    </div>
 
+    <!-- LIFF SDK -->
+    <script charset="utf-8" src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
+    
+    <script>
+        // あなたのLIFF IDに置き換えてください
+        const LIFF_ID = "2007582016-3vVRvd17";
+        
+        // DOM要素
+        const statusEl = document.getElementById('status');
+        const userInfoEl = document.getElementById('user-info');
+        const controlsEl = document.getElementById('controls');
+        const userAvatarEl = document.getElementById('user-avatar');
+        const userNameEl = document.getElementById('user-name');
+        const userIdEl = document.getElementById('user-id');
+        const liffContextEl = document.getElementById('liff-context');
+        const liffVersionEl = document.getElementById('liff-version');
+        
+        // ステータス更新関数
+        function updateStatus(message, type = 'loading') {
+            statusEl.textContent = message;
+            statusEl.className = `status ${type}`;
+        }
+        
+        // LIFF初期化
+        liff.init({
+            liffId: LIFF_ID
+        }).then(() => {
+            updateStatus('LIFF初期化成功！', 'success');
+            
+            // デバッグ情報表示
+            liffContextEl.textContent = liff.getContext().type;
+            liffVersionEl.textContent = liff.getVersion();
+            
+            // ログイン状態確認
+            if (liff.isLoggedIn()) {
+                updateStatus('ログイン済み', 'success');
+                showControls();
+            } else {
+                updateStatus('ログインが必要です', 'error');
+                // 自動ログイン試行
+                liff.login();
+            }
+        }).catch((err) => {
+            console.error('LIFF初期化エラー:', err);
+            updateStatus(`初期化失敗: ${err.message}`, 'error');
+        });
+        
+        // コントロール表示
+        function showControls() {
+            controlsEl.classList.remove('hidden');
+        }
+        
+        // ユーザープロフィール取得
+        function getUserProfile() {
+            if (!liff.isLoggedIn()) {
+                updateStatus('ログインが必要です', 'error');
+                return;
+            }
+            
+            updateStatus('プロフィール取得中...', 'loading');
+            
+            liff.getProfile().then((profile) => {
+                console.log('プロフィール:', profile);
+                
+                // プロフィール情報表示
+                userNameEl.textContent = profile.displayName;
+                userIdEl.textContent = `ID: ${profile.userId}`;
+                userAvatarEl.src = profile.pictureUrl;
+                userInfoEl.style.display = 'block';
+                
+                updateStatus('プロフィール取得成功！', 'success');
+            }).catch((err) => {
+                console.error('プロフィール取得エラー:', err);
+                updateStatus(`プロフィール取得失敗: ${err.message}`, 'error');
+            });
+        }
+        
+        // アプリを閉じる
+        function closeApp() {
+            if (liff.isInClient()) {
+                liff.closeWindow();
+            } else {
+                updateStatus('LINEアプリ内でのみ利用可能', 'error');
+            }
+        }
+        
+        // アプリをシェア
+        function shareApp() {
+            if (liff.isApiAvailable('shareTargetPicker')) {
+                liff.shareTargetPicker([
+                    {
+                        type: 'text',
+                        text: 'LIFFテストアプリを試してみてください！'
+                    }
+                ]).then(() => {
+                    updateStatus('シェア完了', 'success');
+                }).catch((err) => {
+                    console.error('シェアエラー:', err);
+                    updateStatus(`シェア失敗: ${err.message}`, 'error');
+                });
+            } else {
+                updateStatus('シェア機能は利用できません', 'error');
+            }
+        }
+    </script>
+</body>
+</html>
