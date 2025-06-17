@@ -275,146 +275,23 @@
                 return;
             }
             
-            console.log('sendMessages API 利用可能:', liff.isApiAvailable('sendMessages'));
+            console.log('LIFF環境チェック:', {
+                isInClient: liff.isInClient(),
+                context: liff.getContext()
+            });
             
-            if (liff.isApiAvailable('sendMessages')) {
-                console.log('メッセージ送信を開始します');
+            // sendMessages API は常に利用可能なため、環境チェックのみ行う
+            if (liff.isInClient()) {
+                console.log('LINEアプリ内でメッセージ送信を開始します');
                 updateStatus('メッセージ送信中...', 'loading');
                 
                 const currentTime = new Date().toLocaleString('ja-JP');
                 
-                // Messaging API形式のメッセージ
+                // シンプルなテキストメッセージでテスト
                 const messages = [
                     {
-                        type: 'flex',
-                        altText: 'LIFFテストアプリからのメッセージ',
-                        contents: {
-                            type: 'bubble',
-                            header: {
-                                type: 'box',
-                                layout: 'vertical',
-                                contents: [
-                                    {
-                                        type: 'text',
-                                        text: '🚀 LIFF テストアプリ',
-                                        weight: 'bold',
-                                        color: '#ffffff',
-                                        size: 'lg'
-                                    }
-                                ],
-                                backgroundColor: '#667eea',
-                                paddingAll: '20px'
-                            },
-                            body: {
-                                type: 'box',
-                                layout: 'vertical',
-                                contents: [
-                                    {
-                                        type: 'text',
-                                        text: 'メッセージが正常に送信されました！',
-                                        weight: 'bold',
-                                        size: 'md',
-                                        wrap: true
-                                    },
-                                    {
-                                        type: 'separator',
-                                        margin: 'md'
-                                    },
-                                    {
-                                        type: 'box',
-                                        layout: 'vertical',
-                                        margin: 'md',
-                                        contents: [
-                                            {
-                                                type: 'box',
-                                                layout: 'baseline',
-                                                contents: [
-                                                    {
-                                                        type: 'text',
-                                                        text: '送信時刻:',
-                                                        color: '#666666',
-                                                        size: 'sm',
-                                                        flex: 3
-                                                    },
-                                                    {
-                                                        type: 'text',
-                                                        text: currentTime,
-                                                        wrap: true,
-                                                        size: 'sm',
-                                                        flex: 5
-                                                    }
-                                                ]
-                                            },
-                                            {
-                                                type: 'box',
-                                                layout: 'baseline',
-                                                margin: 'sm',
-                                                contents: [
-                                                    {
-                                                        type: 'text',
-                                                        text: 'ステータス:',
-                                                        color: '#666666',
-                                                        size: 'sm',
-                                                        flex: 3
-                                                    },
-                                                    {
-                                                        type: 'text',
-                                                        text: '✅ 送信完了',
-                                                        color: '#00C851',
-                                                        size: 'sm',
-                                                        flex: 5
-                                                    }
-                                                ]
-                                            }
-                                        ]
-                                    }
-                                ],
-                                paddingAll: '20px'
-                            },
-                            footer: {
-                                type: 'box',
-                                layout: 'vertical',
-                                spacing: 'sm',
-                                contents: [
-                                    {
-                                        type: 'button',
-                                        style: 'primary',
-                                        height: 'sm',
-                                        action: {
-                                            type: 'uri',
-                                            label: 'アプリを開く',
-                                            uri: `https://liff.line.me/${LIFF_ID}`
-                                        }
-                                    }
-                                ],
-                                paddingAll: '20px'
-                            }
-                        }
-                    },
-                    {
-                        type: 'template',
-                        altText: 'クイックアクション',
-                        template: {
-                            type: 'buttons',
-                            text: 'その他のアクションを選択してください',
-                            actions: [
-                                {
-                                    type: 'postback',
-                                    label: '📊 使用状況確認',
-                                    data: 'action=check_usage'
-                                },
-                                {
-                                    type: 'postback',
-                                    label: '🔄 再送信',
-                                    data: 'action=resend'
-                                },
-                                {
-                                    type: 'uri',
-                                    label: '📖 ヘルプ',
-                                    uri: 'https://developers.line.biz/ja/docs/liff/'
-                                }
-                            ]
-                        }
+                        type: 'text',
+                        text: `🚀 LIFFテストアプリからメッセージを送信しました！\n\n📅 送信時刻: ${currentTime}\n✅ ステータス: 送信完了`
                     }
                 ];
                 
@@ -430,8 +307,8 @@
                     resetSendButton();
                 });
             } else {
-                console.log('sendMessages API が利用できません');
-                updateStatus('メッセージ送信機能は利用できません', 'error');
+                console.log('LINEアプリ外からのアクセス');
+                updateStatus('LINEアプリ内でのみ利用可能です', 'error');
                 resetSendButton();
             }
         }
