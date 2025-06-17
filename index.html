@@ -247,9 +247,9 @@
             }
         }
         
-        // メッセージ送信（Messaging API形式）
-        function sendMessage() {
-            console.log('sendMessage 関数が呼び出されました');
+        // メッセージ送信（Messaging API サーバー経由）
+        async function sendMessage() {
+            console.log('sendMessage 関数が呼び出されました (Messaging API版)');
             
             // ボタンを無効化してダブルクリックを防ぐ
             const btn = document.getElementById('sendMessageBtn');
@@ -274,41 +274,41 @@
                 resetSendButton();
                 return;
             }
-            
-            console.log('LIFF環境チェック:', {
-                isInClient: liff.isInClient(),
-                context: liff.getContext()
-            });
-            
-            // sendMessages API は常に利用可能なため、環境チェックのみ行う
-            if (liff.isInClient()) {
-                console.log('LINEアプリ内でメッセージ送信を開始します');
-                updateStatus('メッセージ送信中...', 'loading');
-                
-                const currentTime = new Date().toLocaleString('ja-JP');
-                
-                // シンプルなテキストメッセージでテスト
-                const messages = [
-                    {
-                        type: 'text',
-                        text: `🚀 LIFFテストアプリからメッセージを送信しました！\n\n📅 送信時刻: ${currentTime}\n✅ ステータス: 送信完了`
-                    }
-                ];
-                
-                console.log('送信するメッセージ:', messages);
-                
-                liff.sendMessages(messages).then(() => {
-                    console.log('メッセージ送信成功');
-                    updateStatus('Messaging API形式でメッセージ送信完了', 'success');
-                    resetSendButton();
-                }).catch((err) => {
-                    console.error('メッセージ送信エラー:', err);
-                    updateStatus(`メッセージ送信失敗: ${err.message}`, 'error');
-                    resetSendButton();
+
+            try {
+                // ユーザープロフィールを取得してユーザーIDを取得
+                updateStatus('ユーザー情報取得中...', 'loading');
+                const profile = await liff.getProfile();
+                console.log('ユーザープロフィール:', profile);
+
+                updateStatus('Messaging API経由でメッセージ送信中...', 'loading');
+
+                // APIサーバーにリクエスト送信
+                const response = await fetch('/api/send-message', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        userId: profile.userId,
+                        messageType: 'flex' // または 'text'
+                    })
                 });
-            } else {
-                console.log('LINEアプリ外からのアクセス');
-                updateStatus('LINEアプリ内でのみ利用可能です', 'error');
+
+                const result = await response.json();
+                console.log('API レスポンス:', result);
+
+                if (response.ok && result.success) {
+                    updateStatus('Messaging API経由でメッセージ送信完了！', 'success');
+                } else {
+                    console.error('API エラー:', result);
+                    updateStatus(`送信失敗: ${result.message || result.error}`, 'error');
+                }
+
+            } catch (error) {
+                console.error('メッセージ送信エラー:', error);
+                updateStatus(`エラー: ${error.message}`, 'error');
+            } finally {
                 resetSendButton();
             }
         }

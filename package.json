@@ -1,0 +1,17 @@
+{
+  "name": "test-liff-app",
+  "version": "1.0.0",
+  "description": "LIFF Test Application with Messaging API",
+  "main": "index.html",
+  "scripts": {
+    "dev": "vercel dev",
+    "build": "echo 'Build complete'",
+    "start": "echo 'Static site'"
+  },
+  "dependencies": {
+    "@line/bot-sdk": "^8.0.0"
+  },
+  "engines": {
+    "node": "18.x"
+  }
+} 
