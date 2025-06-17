@@ -37,108 +37,34 @@ export default async function handler(req, res) {
 
         let messagePayload;
 
-        if (messageType === 'flex') {
-            // Flex Message
-            const currentTime = new Date().toLocaleString('ja-JP');
-            messagePayload = [
-                {
-                    type: 'flex',
-                    altText: 'LIFFテストアプリからのメッセージ',
-                    contents: {
-                        type: 'bubble',
-                        header: {
-                            type: 'box',
-                            layout: 'vertical',
-                            contents: [
-                                {
-                                    type: 'text',
-                                    text: '🧩 謎解きゲーム',
-                                    weight: 'bold',
-                                    color: '#ffffff',
-                                    size: 'lg'
-                                }
-                            ],
-                            backgroundColor: '#667eea',
-                            paddingAll: '20px'
+        // 挨拶選択ボタンのTemplate Message
+        messagePayload = [
+            {
+                type: 'template',
+                altText: '挨拶を選択してください',
+                template: {
+                    type: 'buttons',
+                    text: '🤖 こんにちは！\n今の気分で挨拶を選んでください😊',
+                    actions: [
+                        {
+                            type: 'postback',
+                            label: '🌅 おはよう',
+                            data: 'greeting=morning'
                         },
-                        body: {
-                            type: 'box',
-                            layout: 'vertical',
-                            contents: [
-                                {
-                                    type: 'text',
-                                    text: '🎮 謎解きゲーム開始！',
-                                    weight: 'bold',
-                                    size: 'md',
-                                    wrap: true
-                                },
-                                {
-                                    type: 'separator',
-                                    margin: 'md'
-                                },
-                                {
-                                    type: 'box',
-                                    layout: 'vertical',
-                                    margin: 'md',
-                                    contents: [
-                                        {
-                                            type: 'box',
-                                            layout: 'baseline',
-                                            contents: [
-                                                {
-                                                    type: 'text',
-                                                    text: '送信時刻:',
-                                                    color: '#666666',
-                                                    size: 'sm',
-                                                    flex: 3
-                                                },
-                                                {
-                                                    type: 'text',
-                                                    text: currentTime,
-                                                    wrap: true,
-                                                    size: 'sm',
-                                                    flex: 5
-                                                }
-                                            ]
-                                        },
-                                        {
-                                            type: 'box',
-                                            layout: 'baseline',
-                                            margin: 'sm',
-                                            contents: [
-                                                {
-                                                    type: 'text',
-                                                    text: 'ステータス:',
-                                                    color: '#666666',
-                                                    size: 'sm',
-                                                    flex: 3
-                                                },
-                                                {
-                                                    type: 'text',
-                                                    text: '✅ ゲーム開始準備完了',
-                                                    color: '#00C851',
-                                                    size: 'sm',
-                                                    flex: 5
-                                                }
-                                            ]
-                                        }
-                                    ]
-                                }
-                            ],
-                            paddingAll: '20px'
+                        {
+                            type: 'postback',
+                            label: '☀️ こんにちは',
+                            data: 'greeting=afternoon'
+                        },
+                        {
+                            type: 'postback',
+                            label: '🌙 こんばんは',
+                            data: 'greeting=evening'
                         }
-                    }
+                    ]
                 }
-            ];
-        } else {
-            // Simple text message
-            messagePayload = messages || [
-                {
-                    type: 'text',
-                    text: `🎮 謎解きゲーム開始！\n\n📅 開始時刻: ${new Date().toLocaleString('ja-JP')}\n✅ ステータス: ゲーム準備完了`
-                }
-            ];
-        }
+            }
+        ];
 
         console.log('Sending message to LINE API:', {
             userId,
