@@ -114,26 +114,38 @@ async function handleMessage(event, accessToken) {
     
     console.log('User message:', userMessage);
     
-    // シンプルな応答例
-    let replyMessage = {
-        type: 'text',
-        text: `「${userMessage}」ですね！\n\n🤖 まだ簡単な会話しかできませんが、\nどんどん話しかけてください😊`
+    // トリガーワード辞書
+    const triggerResponses = {
+        'なんだちみは？': 'なんだちみはってか？',
+        'なんだちみは?': 'なんだちみはってか？',  // 全角・半角対応
+        'なんだちみは': 'なんだちみはってか？',     // 「？」なしも対応
+        
+        // 他のトリガーワードも簡単に追加可能
+        // 'トリガーワード': '返信メッセージ',
+        // 'こんにちは': 'こんにちは！元気ですか？',
+        // 'おつかれ': 'お疲れ様です！'
     };
     
-    // 特定のキーワードに応答
-    if (userMessage.includes('元気')) {
-        replyMessage = {
-            type: 'text',
-            text: '💪 元気ですよ！ありがとうございます😊\nあなたも元気そうで良かったです！'
-        };
-    } else if (userMessage.includes('ありがとう')) {
-        replyMessage = {
-            type: 'text',
-            text: '😊 どういたしまして！\nお役に立てて嬉しいです✨'
-        };
+    // トリガーワードをチェック
+    let replyMessage = null;
+    
+    for (const [trigger, response] of Object.entries(triggerResponses)) {
+        if (userMessage === trigger || userMessage.includes(trigger)) {
+            replyMessage = {
+                type: 'text',
+                text: response
+            };
+            console.log(`Triggered by: "${trigger}" -> Response: "${response}"`);
+            break;
+        }
     }
     
-    await sendMessage(userId, [replyMessage], accessToken);
+    // トリガーワードが見つからない場合は返信しない
+    if (replyMessage) {
+        await sendMessage(userId, [replyMessage], accessToken);
+    } else {
+        console.log('No trigger word found, no response sent');
+    }
 }
 
 // メッセージ送信関数
