@@ -49,22 +49,27 @@ export default async function handler(req, res) {
                         {
                             type: 'postback',
                             label: '🌅 おはよう',
-                            data: 'greeting=morning'
+                            data: 'greeting=morning',
+                            displayText: 'おはよう'
                         },
                         {
                             type: 'postback',
                             label: '☀️ こんにちは',
-                            data: 'greeting=afternoon'
+                            data: 'greeting=afternoon',
+                            displayText: 'こんにちは'
                         },
                         {
                             type: 'postback',
                             label: '🌙 こんばんは',
-                            data: 'greeting=evening'
+                            data: 'greeting=evening',
+                            displayText: 'こんばんは'
                         }
                     ]
                 }
             }
         ];
+
+        console.log('Prepared Template Message:', JSON.stringify(messagePayload, null, 2));
 
         console.log('Sending message to LINE API:', {
             userId,

@@ -16,6 +16,12 @@ export default async function handler(req, res) {
     }
 
     try {
+        console.log('Webhook received:', {
+            method: req.method,
+            headers: req.headers,
+            body: req.body
+        });
+
         const { events } = req.body;
         
         // 環境変数からアクセストークンを取得
@@ -26,18 +32,27 @@ export default async function handler(req, res) {
             return res.status(500).json({ error: 'Access token not configured' });
         }
 
+        if (!events || events.length === 0) {
+            console.log('No events in webhook');
+            return res.status(200).json({ success: true, message: 'No events' });
+        }
+
         // 各イベントを処理
-        for (const event of events || []) {
-            console.log('Received event:', event);
+        for (const event of events) {
+            console.log('Processing event:', JSON.stringify(event, null, 2));
 
             if (event.type === 'postback') {
+                console.log('Handling postback event');
                 await handlePostback(event, ACCESS_TOKEN);
             } else if (event.type === 'message') {
+                console.log('Handling message event');
                 await handleMessage(event, ACCESS_TOKEN);
+            } else {
+                console.log('Unknown event type:', event.type);
             }
         }
 
-        res.status(200).json({ success: true });
+        res.status(200).json({ success: true, processedEvents: events.length });
 
     } catch (error) {
         console.error('Webhook Error:', error);
