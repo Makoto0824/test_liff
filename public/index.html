@@ -132,7 +132,7 @@
                 📤 アプリをシェア
             </button>
             <button class="btn" onclick="sendMessage()" id="sendMessageBtn">
-                💬 メッセージ送信
+                🧩 謎解きSTART
             </button>
         </div>
         
@@ -281,7 +281,7 @@
                 const profile = await liff.getProfile();
                 console.log('ユーザープロフィール:', profile);
 
-                updateStatus('Messaging API経由でメッセージ送信中...', 'loading');
+                updateStatus('謎解きゲーム開始準備中...', 'loading');
 
                 // APIサーバーにリクエスト送信
                 const response = await fetch('/api/send-message', {
@@ -299,7 +299,7 @@
                 console.log('API レスポンス:', result);
 
                 if (response.ok && result.success) {
-                    updateStatus('Messaging API経由でメッセージ送信完了！', 'success');
+                    updateStatus('謎解きゲーム開始！', 'success');
                 } else {
                     console.error('API エラー:', result);
                     updateStatus(`送信失敗: ${result.message || result.error}`, 'error');
@@ -318,7 +318,7 @@
             const btn = document.getElementById('sendMessageBtn');
             if (btn) {
                 btn.disabled = false;
-                btn.textContent = '💬 メッセージ送信';
+                btn.textContent = '🧩 謎解きSTART';
             }
         }
     </script>

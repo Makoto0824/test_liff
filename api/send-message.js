@@ -52,7 +52,7 @@ export default async function handler(req, res) {
                             contents: [
                                 {
                                     type: 'text',
-                                    text: '🚀 LIFF テストアプリ',
+                                    text: '🧩 謎解きゲーム',
                                     weight: 'bold',
                                     color: '#ffffff',
                                     size: 'lg'
@@ -67,7 +67,7 @@ export default async function handler(req, res) {
                             contents: [
                                 {
                                     type: 'text',
-                                    text: 'Messaging APIからメッセージを送信しました！',
+                                    text: '🎮 謎解きゲーム開始！',
                                     weight: 'bold',
                                     size: 'md',
                                     wrap: true
@@ -115,7 +115,7 @@ export default async function handler(req, res) {
                                                 },
                                                 {
                                                     type: 'text',
-                                                    text: '✅ サーバーから送信完了',
+                                                    text: '✅ ゲーム開始準備完了',
                                                     color: '#00C851',
                                                     size: 'sm',
                                                     flex: 5
@@ -135,7 +135,7 @@ export default async function handler(req, res) {
             messagePayload = messages || [
                 {
                     type: 'text',
-                    text: `🚀 Messaging APIからメッセージを送信しました！\n\n📅 送信時刻: ${new Date().toLocaleString('ja-JP')}\n✅ ステータス: サーバーから送信完了`
+                    text: `🎮 謎解きゲーム開始！\n\n📅 開始時刻: ${new Date().toLocaleString('ja-JP')}\n✅ ステータス: ゲーム準備完了`
                 }
             ];
         }
