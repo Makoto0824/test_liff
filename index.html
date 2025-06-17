@@ -131,7 +131,7 @@
             <button class="btn" onclick="shareApp()">
                 📤 アプリをシェア
             </button>
-            <button class="btn" onclick="sendMessage()">
+            <button class="btn" onclick="sendMessage()" id="sendMessageBtn">
                 💬 メッセージ送信
             </button>
         </div>
@@ -249,12 +249,36 @@
         
         // メッセージ送信（Messaging API形式）
         function sendMessage() {
-            if (!liff.isLoggedIn()) {
-                updateStatus('ログインが必要です', 'error');
+            console.log('sendMessage 関数が呼び出されました');
+            
+            // ボタンを無効化してダブルクリックを防ぐ
+            const btn = document.getElementById('sendMessageBtn');
+            if (btn) {
+                btn.disabled = true;
+                btn.textContent = '📤 送信中...';
+            }
+            
+            // LIFF の初期化状態をチェック
+            if (typeof liff === 'undefined') {
+                console.error('LIFF が未定義です');
+                updateStatus('LIFF が初期化されていません', 'error');
+                resetSendButton();
                 return;
             }
             
+            console.log('LIFF ログイン状態:', liff.isLoggedIn());
+            
+            if (!liff.isLoggedIn()) {
+                console.log('ログインが必要です');
+                updateStatus('ログインが必要です', 'error');
+                resetSendButton();
+                return;
+            }
+            
+            console.log('sendMessages API 利用可能:', liff.isApiAvailable('sendMessages'));
+            
             if (liff.isApiAvailable('sendMessages')) {
+                console.log('メッセージ送信を開始します');
                 updateStatus('メッセージ送信中...', 'loading');
                 
                 const currentTime = new Date().toLocaleString('ja-JP');
@@ -394,14 +418,30 @@
                     }
                 ];
                 
+                console.log('送信するメッセージ:', messages);
+                
                 liff.sendMessages(messages).then(() => {
+                    console.log('メッセージ送信成功');
                     updateStatus('Messaging API形式でメッセージ送信完了', 'success');
+                    resetSendButton();
                 }).catch((err) => {
                     console.error('メッセージ送信エラー:', err);
                     updateStatus(`メッセージ送信失敗: ${err.message}`, 'error');
+                    resetSendButton();
                 });
             } else {
+                console.log('sendMessages API が利用できません');
                 updateStatus('メッセージ送信機能は利用できません', 'error');
+                resetSendButton();
+            }
+        }
+        
+        // ボタンリセット関数
+        function resetSendButton() {
+            const btn = document.getElementById('sendMessageBtn');
+            if (btn) {
+                btn.disabled = false;
+                btn.textContent = '💬 メッセージ送信';
             }
         }
     </script>
