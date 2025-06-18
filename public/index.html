@@ -314,15 +314,23 @@
                                     console.log('🔧 友だち追加を実行中...');
                                     await liff.addToFriend();
                                     console.log('✅ 友だち追加成功');
-                                    updateStatus('友だち追加後、再度お試しください', 'success');
+                                    updateStatus('友だち追加が完了しました！', 'success');
+                                    
+                                    // 友だち追加成功後、少し待ってから自動的にメッセージ送信を続行
+                                    setTimeout(() => {
+                                        updateStatus('会話を開始しています...', 'loading');
+                                        // 友だち追加後は友だち状態チェックをスキップして続行
+                                        continueMessageSending(profile);
+                                    }, 2000);
+                                    return;
                                 } catch (addFriendError) {
                                     console.error('❌ 友だち追加エラー:', addFriendError);
                                     console.log('エラーの詳細:', addFriendError.message);
-                                    updateStatus(`手動で友だち追加してください (エラー: ${addFriendError.message})`, 'error');
+                                    showManualAddFriendInstructions();
                                 }
                             } else {
                                 console.warn('⚠️ addToFriend API は利用できません');
-                                updateStatus('手動で友だち追加してください (API未対応)', 'error');
+                                showManualAddFriendInstructions();
                             }
                         }
                         resetSendButton();
@@ -372,6 +380,57 @@
             if (btn) {
                 btn.disabled = false;
                 btn.textContent = '💬 会話を始める';
+            }
+        }
+        
+        // 手動友だち追加の案内を表示
+        function showManualAddFriendInstructions() {
+            const instructions = `
+友だち追加が必要です。以下の方法で友だち追加してください：
+
+1. このLIFFアプリのURLをLINEで共有
+2. 共有されたメッセージから友だち追加
+3. 友だち追加後、再度このアプリを開いてください
+
+または、BOTの公式アカウントを直接検索して友だち追加してください。
+            `.trim();
+            
+            updateStatus('手動で友だち追加してください', 'error');
+            console.log('📋 友だち追加の手順:', instructions);
+            
+            // 詳細な案内をアラートで表示
+            alert(instructions);
+        }
+        
+        // 友だち追加後のメッセージ送信継続
+        async function continueMessageSending(profile) {
+            try {
+                // APIサーバーにリクエスト送信
+                const response = await fetch('/api/send-message', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        userId: profile.userId,
+                        messageType: 'flex' // または 'text'
+                    })
+                });
+
+                const result = await response.json();
+                console.log('API レスポンス:', result);
+
+                if (response.ok && result.success) {
+                    updateStatus('会話を開始しました！挨拶を選んでください😊', 'success');
+                } else {
+                    console.error('API エラー:', result);
+                    updateStatus(`送信失敗: ${result.message || result.error}`, 'error');
+                }
+            } catch (error) {
+                console.error('メッセージ送信エラー:', error);
+                updateStatus(`エラー: ${error.message}`, 'error');
+            } finally {
+                resetSendButton();
             }
         }
     </script>
