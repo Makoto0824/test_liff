@@ -282,7 +282,7 @@
                 console.log('ユーザープロフィール:', profile);
 
                 // 友だち追加状態をチェック
-                if (liff.isApiAvailable('getFriendship')) {
+                try {
                     updateStatus('友だち状態確認中...', 'loading');
                     
                     // デバッグモード：URLに?debug=true があれば強制的に友だちでない状態をシミュレート
@@ -303,16 +303,21 @@
                         updateStatus('友だち追加が必要です', 'error');
                         
                         if (confirm('BOTと友だちになると会話できます。\n友だち追加しますか？')) {
-                            if (liff.isApiAvailable('addToFriend')) {
+                            try {
                                 await liff.addToFriend();
                                 updateStatus('友だち追加後、再度お試しください', 'success');
-                            } else {
+                            } catch (addFriendError) {
+                                console.error('友だち追加エラー:', addFriendError);
                                 updateStatus('手動で友だち追加してください', 'error');
                             }
                         }
                         resetSendButton();
                         return;
                     }
+                } catch (friendshipError) {
+                    console.warn('友だち状態取得エラー:', friendshipError);
+                    console.log('友だち状態チェックをスキップして続行します');
+                    // 友だち状態が取得できない場合はスキップして続行
                 }
 
                 updateStatus('会話を開始しています...', 'loading');
