@@ -143,7 +143,7 @@
     </div>
 
     <!-- LIFF SDK -->
-    <script charset="utf-8" src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
+    <script charset="utf-8" src="https://static.line-scdn.net/liff/edge/versions/2.26.1/sdk.js"></script>
     
     <script>
         // あなたのLIFF IDに置き換えてください
@@ -286,12 +286,17 @@
                     updateStatus('友だち状態確認中...', 'loading');
                     
                     // デバッグモード：URLに?debug=true があれば強制的に友だちでない状態をシミュレート
-                    const isDebugMode = new URLSearchParams(window.location.search).get('debug') === 'true';
+                    const urlParams = new URLSearchParams(window.location.search);
+                    const isDebugMode = urlParams.get('debug') === 'true';
+                    const forceUnfriend = urlParams.get('unfriend') === 'true';
                     
                     let friendship;
-                    if (isDebugMode) {
+                    if (isDebugMode || forceUnfriend) {
                         friendship = { friendFlag: false }; // デバッグ用：強制的に友だちでない状態
                         console.log('🔧 デバッグモード: 友だちでない状態をシミュレート');
+                        if (forceUnfriend) {
+                            console.log('🔧 ?unfriend=true パラメータで友だち解除状態をテスト');
+                        }
                     } else {
                         friendship = await liff.getFriendship();
                     }
@@ -303,15 +308,21 @@
                         updateStatus('友だち追加が必要です', 'error');
                         
                         if (confirm('BOTと友だちになると会話できます。\n友だち追加しますか？')) {
-                            try {
-                                console.log('🔧 友だち追加を実行中...');
-                                await liff.addToFriend();
-                                console.log('✅ 友だち追加成功');
-                                updateStatus('友だち追加後、再度お試しください', 'success');
-                            } catch (addFriendError) {
-                                console.error('❌ 友だち追加エラー:', addFriendError);
-                                console.log('エラーの詳細:', addFriendError.message);
-                                updateStatus(`手動で友だち追加してください (エラー: ${addFriendError.message})`, 'error');
+                            // addToFriend API の利用可能性をチェック
+                            if (typeof liff.addToFriend === 'function') {
+                                try {
+                                    console.log('🔧 友だち追加を実行中...');
+                                    await liff.addToFriend();
+                                    console.log('✅ 友だち追加成功');
+                                    updateStatus('友だち追加後、再度お試しください', 'success');
+                                } catch (addFriendError) {
+                                    console.error('❌ 友だち追加エラー:', addFriendError);
+                                    console.log('エラーの詳細:', addFriendError.message);
+                                    updateStatus(`手動で友だち追加してください (エラー: ${addFriendError.message})`, 'error');
+                                }
+                            } else {
+                                console.warn('⚠️ addToFriend API は利用できません');
+                                updateStatus('手動で友だち追加してください (API未対応)', 'error');
                             }
                         }
                         resetSendButton();
