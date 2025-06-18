@@ -304,11 +304,14 @@
                         
                         if (confirm('BOTと友だちになると会話できます。\n友だち追加しますか？')) {
                             try {
+                                console.log('🔧 友だち追加を実行中...');
                                 await liff.addToFriend();
+                                console.log('✅ 友だち追加成功');
                                 updateStatus('友だち追加後、再度お試しください', 'success');
                             } catch (addFriendError) {
-                                console.error('友だち追加エラー:', addFriendError);
-                                updateStatus('手動で友だち追加してください', 'error');
+                                console.error('❌ 友だち追加エラー:', addFriendError);
+                                console.log('エラーの詳細:', addFriendError.message);
+                                updateStatus(`手動で友だち追加してください (エラー: ${addFriendError.message})`, 'error');
                             }
                         }
                         resetSendButton();
