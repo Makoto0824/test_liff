@@ -281,28 +281,7 @@
                 const profile = await liff.getProfile();
                 console.log('ユーザープロフィール:', profile);
 
-                // 友だち追加状態をチェック
-                if (liff.isApiAvailable('getFriendship')) {
-                    updateStatus('友だち状態確認中...', 'loading');
-                    const friendship = await liff.getFriendship();
-                    console.log('友だち状態:', friendship);
-                    
-                    if (!friendship.friendFlag) {
-                        // 友だち追加されていない場合
-                        updateStatus('友だち追加が必要です', 'error');
-                        
-                        if (confirm('BOTと友だちになると会話できます。\n友だち追加しますか？')) {
-                            if (liff.isApiAvailable('addToFriend')) {
-                                await liff.addToFriend();
-                                updateStatus('友だち追加後、再度お試しください', 'success');
-                            } else {
-                                updateStatus('手動で友だち追加してください', 'error');
-                            }
-                        }
-                        resetSendButton();
-                        return;
-                    }
-                }
+                // 直接メッセージ送信を試行（友だち追加は失敗時に促す）
 
                 updateStatus('会話を開始しています...', 'loading');
 
@@ -325,7 +304,18 @@
                     updateStatus('会話を開始しました！挨拶を選んでください😊', 'success');
                 } else {
                     console.error('API エラー:', result);
-                    updateStatus(`送信失敗: ${result.message || result.error}`, 'error');
+                    
+                    // 友だち追加が必要な可能性をチェック
+                    if (result.error && result.error.includes('Invalid reply token')) {
+                        // 友だち追加を促す
+                        updateStatus('友だち追加が必要です', 'error');
+                        if (confirm('BOTと友だちになると会話できます。\n手動で友だち追加してください。')) {
+                            // BOTのQRコードやIDを表示する案内
+                            updateStatus('LINEでBOTを検索して友だち追加してください', 'error');
+                        }
+                    } else {
+                        updateStatus(`送信失敗: ${result.message || result.error}`, 'error');
+                    }
                 }
 
             } catch (error) {
