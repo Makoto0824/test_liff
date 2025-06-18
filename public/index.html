@@ -145,6 +145,9 @@
     <!-- LIFF SDK -->
     <script charset="utf-8" src="https://static.line-scdn.net/liff/edge/versions/2.26.1/sdk.js"></script>
     
+    <!-- QRコード生成ライブラリ -->
+    <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
+    
     <script>
         // あなたのLIFF IDに置き換えてください
         const LIFF_ID = "2007582016-3vVRvd17";
@@ -385,21 +388,70 @@
         
         // 手動友だち追加の案内を表示
         function showManualAddFriendInstructions() {
-            const instructions = `
-友だち追加が必要です。以下の方法で友だち追加してください：
-
-1. このLIFFアプリのURLをLINEで共有
-2. 共有されたメッセージから友だち追加
-3. 友だち追加後、再度このアプリを開いてください
-
-または、BOTの公式アカウントを直接検索して友だち追加してください。
-            `.trim();
+            // LINE Add Friend URLを生成（実際のBOTのLINE IDに置き換える必要があります）
+            const lineAddFriendUrl = 'https://line.me/R/ti/p/@your-bot-id';  // 実際のBOT IDに要変更
             
             updateStatus('手動で友だち追加してください', 'error');
-            console.log('📋 友だち追加の手順:', instructions);
+            console.log('📋 友だち追加URL:', lineAddFriendUrl);
             
-            // 詳細な案内をアラートで表示
-            alert(instructions);
+            // QRコードとURLを表示するモーダルを作成
+            showFriendAddModal(lineAddFriendUrl);
+        }
+        
+        // 友だち追加モーダルを表示
+        function showFriendAddModal(addFriendUrl) {
+            // モーダルHTML作成
+            const modalHtml = `
+                <div id="friendAddModal" style="
+                    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+                    background: rgba(0,0,0,0.8); display: flex; align-items: center; justify-content: center;
+                    z-index: 1000; padding: 20px; box-sizing: border-box;
+                ">
+                    <div style="
+                        background: white; border-radius: 15px; padding: 30px; text-align: center;
+                        max-width: 400px; width: 100%;
+                    ">
+                        <h3 style="margin-top: 0; color: #333;">友だち追加してください</h3>
+                        <div id="qrcode" style="margin: 20px auto;"></div>
+                        <p style="margin: 15px 0; color: #666; font-size: 14px;">
+                            📱 QRコードをスキャンするか<br>
+                            下記URLをタップしてください
+                        </p>
+                        <a href="${addFriendUrl}" target="_blank" style="
+                            display: inline-block; background: #00C300; color: white; 
+                            padding: 12px 24px; border-radius: 25px; text-decoration: none;
+                            margin: 10px 0;
+                        ">🔗 友だち追加</a>
+                        <br>
+                        <button onclick="closeFriendAddModal()" style="
+                            background: #ccc; color: #666; border: none; padding: 10px 20px;
+                            border-radius: 20px; margin-top: 15px; cursor: pointer;
+                        ">閉じる</button>
+                    </div>
+                </div>
+            `;
+            
+            // モーダルを画面に追加
+            document.body.insertAdjacentHTML('beforeend', modalHtml);
+            
+            // QRコード生成
+            if (typeof QRCode !== 'undefined') {
+                QRCode.toCanvas(document.getElementById('qrcode'), addFriendUrl, {
+                    width: 200,
+                    height: 200,
+                    margin: 2
+                }, function (error) {
+                    if (error) console.error('QRコード生成エラー:', error);
+                });
+            }
+        }
+        
+        // 友だち追加モーダルを閉じる
+        function closeFriendAddModal() {
+            const modal = document.getElementById('friendAddModal');
+            if (modal) {
+                modal.remove();
+            }
         }
         
         // 友だち追加後のメッセージ送信継続
