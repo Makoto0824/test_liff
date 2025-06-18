@@ -145,8 +145,7 @@
     <!-- LIFF SDK -->
     <script charset="utf-8" src="https://static.line-scdn.net/liff/edge/versions/2.26.1/sdk.js"></script>
     
-    <!-- QRコード生成ライブラリ -->
-    <script src="https://unpkg.com/qrcode@1.5.3/build/qrcode.min.js"></script>
+
     
     <script>
         // あなたのLIFF IDに置き換えてください
@@ -434,23 +433,10 @@
             // モーダルを画面に追加
             document.body.insertAdjacentHTML('beforeend', modalHtml);
             
-                         // QRコード生成
+                         // QRコード画像を表示
              const qrcodeDiv = document.getElementById('qrcode');
-             if (typeof QRCode !== 'undefined') {
-                 QRCode.toCanvas(qrcodeDiv, addFriendUrl, {
-                     width: 200,
-                     height: 200,
-                     margin: 2
-                 }, function (error) {
-                     if (error) {
-                         console.error('QRコード生成エラー:', error);
-                         qrcodeDiv.innerHTML = '<p style="color: #666;">QRコード生成に失敗しました</p>';
-                     }
-                 });
-             } else {
-                 console.error('QRCodeライブラリが読み込まれていません');
-                 qrcodeDiv.innerHTML = '<p style="color: #666;">QRコードライブラリ読み込みエラー</p>';
-             }
+             qrcodeDiv.innerHTML = '<img src="/qr-code.png" alt="友だち追加QRコード" style="max-width: 200px; height: auto; border: 1px solid #ddd; border-radius: 8px;">';
+             console.log('QRコード画像を表示しました');
         }
         
         // 友だち追加モーダルを閉じる
