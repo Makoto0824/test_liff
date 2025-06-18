@@ -281,6 +281,29 @@
                 const profile = await liff.getProfile();
                 console.log('ユーザープロフィール:', profile);
 
+                // 友だち追加状態をチェック
+                if (liff.isApiAvailable('getFriendship')) {
+                    updateStatus('友だち状態確認中...', 'loading');
+                    const friendship = await liff.getFriendship();
+                    console.log('友だち状態:', friendship);
+                    
+                    if (!friendship.friendFlag) {
+                        // 友だち追加されていない場合
+                        updateStatus('友だち追加が必要です', 'error');
+                        
+                        if (confirm('BOTと友だちになると会話できます。\n友だち追加しますか？')) {
+                            if (liff.isApiAvailable('addToFriend')) {
+                                await liff.addToFriend();
+                                updateStatus('友だち追加後、再度お試しください', 'success');
+                            } else {
+                                updateStatus('手動で友だち追加してください', 'error');
+                            }
+                        }
+                        resetSendButton();
+                        return;
+                    }
+                }
+
                 updateStatus('会話を開始しています...', 'loading');
 
                 // APIサーバーにリクエスト送信
