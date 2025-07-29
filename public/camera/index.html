@@ -101,29 +101,35 @@
 </head>
 
 <body>
-    <div class="container">
-        <div class="camera-icon">📸</div>
-        <h1>QRカメラ</h1>
-        
-        <div id="status" class="status" style="display: none;"></div>
-        
-        <button id="scanBtn" class="btn" onclick="startScan()">
-            📱 カメラを起動
-        </button>
-        
-        <button id="backBtn" class="btn" onclick="goBack()" style="background: rgba(108, 117, 125, 0.2);">
-            🔙 戻る
-        </button>
-        
-        <div id="result" class="result" style="display: none;"></div>
+            <div class="container">
+            <div class="camera-icon">📸</div>
+            <h1>QRカメラ</h1>
+            
+            <div id="status" class="status" style="display: none;"></div>
+            
+            <!-- 自動起動中の表示 -->
+            <div id="autoStartMessage" style="text-align: center; margin: 20px 0; font-size: 16px; opacity: 0.8;">
+                カメラを起動中...
+            </div>
+            
+            <button id="scanBtn" class="btn" onclick="startScan()" style="display: none;">
+                📱 カメラを起動
+            </button>
+            
+            <button id="backBtn" class="btn" onclick="goBack()" style="background: rgba(108, 117, 125, 0.2);">
+                🔙 戻る
+            </button>
+            
+            <div id="result" class="result" style="display: none;"></div>
         
         <!-- バージョン情報 -->
         <div style="margin-top: 30px; font-size: 12px; opacity: 0.7; text-align: center;">
-            <div>Version: 1.4.0</div>
-            <div>Build: 2024-01-15 21:05</div>
+            <div>Version: 1.5.0</div>
+            <div>Build: 2024-01-15 21:10</div>
             <div>LIFF ID: 2007582016-vl416l5z</div>
             <div>LIFF SDK: v2.26.1</div>
             <div>API: scanCodeV2</div>
+            <div>Auto Start: Enabled</div>
         </div>
     </div>
 
@@ -173,6 +179,14 @@ liff.scanCodeV2: ${liff.scanCodeV2}`;
                     clearStatus();
                 }, 3000);
                 
+                // 自動カメラ起動（scanCodeV2が利用可能な場合）
+                if (typeof liff.scanCodeV2 === 'function') {
+                    console.log('自動カメラ起動を開始します');
+                    setTimeout(() => {
+                        startScan();
+                    }, 1000); // 1秒後に自動起動
+                }
+                
             } catch (err) {
                 console.error('LIFF初期化エラー:', err);
                 updateStatus(`初期化エラー: ${err.message}`, 'error');
@@ -189,6 +203,9 @@ liff.scanCodeV2: ${liff.scanCodeV2}`;
             const resultDiv = document.getElementById('result');
             
             try {
+                // 自動起動メッセージを表示
+                showAutoStartMessage();
+                
                 scanBtn.disabled = true;
                 scanBtn.textContent = '📷 スキャン中...';
                 updateStatus('カメラを起動中...', 'loading');
@@ -334,6 +351,16 @@ liff.scanCodeV2: ${liff.scanCodeV2}`;
             statusDiv.style.display = 'none';
         }
         
+        function showAutoStartMessage() {
+            const autoStartDiv = document.getElementById('autoStartMessage');
+            autoStartDiv.style.display = 'block';
+        }
+        
+        function hideAutoStartMessage() {
+            const autoStartDiv = document.getElementById('autoStartMessage');
+            autoStartDiv.style.display = 'none';
+        }
+        
         function goBack() {
             if (liff.isInClient()) {
                 liff.closeWindow();
@@ -347,11 +374,12 @@ liff.scanCodeV2: ${liff.scanCodeV2}`;
         
         // バージョン情報をコンソールに出力
         console.log('=== QRカメラ アプリ情報 ===');
-        console.log('Version: 1.4.0');
-        console.log('Build: 2024-01-15 21:05');
+        console.log('Version: 1.5.0');
+        console.log('Build: 2024-01-15 21:10');
         console.log('LIFF ID: 2007582016-vl416l5z');
         console.log('LIFF SDK: v2.26.1');
         console.log('API: scanCodeV2');
+        console.log('Auto Start: Enabled');
         console.log('========================');
     </script>
 </body>
