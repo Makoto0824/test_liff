@@ -124,8 +124,8 @@
         
         <!-- バージョン情報 -->
         <div style="margin-top: 30px; font-size: 12px; opacity: 0.7; text-align: center;">
-            <div>Version: 1.5.0</div>
-            <div>Build: 2024-01-15 21:10</div>
+            <div>Version: 1.5.1</div>
+            <div>Build: 2024-01-15 21:15</div>
             <div>LIFF ID: 2007582016-vl416l5z</div>
             <div>LIFF SDK: v2.26.1</div>
             <div>API: scanCodeV2</div>
@@ -147,24 +147,24 @@
                 const isInClient = liff.isInClient();
                 console.log('isInClient:', isInClient);
                 
-                // アラートで確認結果を表示
-                setTimeout(() => {
-                    alert("isInClient: " + isInClient);
-                }, 1000);
+                // アラートで確認結果を表示（デバッグ用）
+                // setTimeout(() => {
+                //     alert("isInClient: " + isInClient);
+                // }, 1000);
                 
                 // scanCodeV2 API利用可能性チェック
                 console.log('scanCodeV2 API チェック開始');
                 console.log('typeof liff.scanCodeV2:', typeof liff.scanCodeV2);
                 console.log('liff.scanCodeV2:', liff.scanCodeV2);
                 
-                // アラートでデバッグ情報を表示
-                const debugInfo = `scanCodeV2 API チェック結果:
-typeof liff.scanCodeV2: ${typeof liff.scanCodeV2}
-liff.scanCodeV2: ${liff.scanCodeV2}`;
+                // アラートでデバッグ情報を表示（デバッグ用）
+                // const debugInfo = `scanCodeV2 API チェック結果:
+                // typeof liff.scanCodeV2: ${typeof liff.scanCodeV2}
+                // liff.scanCodeV2: ${liff.scanCodeV2}`;
                 
-                setTimeout(() => {
-                    alert(debugInfo);
-                }, 2000);
+                // setTimeout(() => {
+                //     alert(debugInfo);
+                // }, 2000);
                 
                 if (typeof liff.scanCodeV2 !== 'function') {
                     console.warn('scanCodeV2 APIは利用できません。手動入力モードを使用します。');
@@ -191,10 +191,10 @@ liff.scanCodeV2: ${liff.scanCodeV2}`;
                 console.error('LIFF初期化エラー:', err);
                 updateStatus(`初期化エラー: ${err.message}`, 'error');
                 
-                // エラー時もアラート表示
-                setTimeout(() => {
-                    alert("エラー: " + err.message);
-                }, 1000);
+                // エラー時もアラート表示（デバッグ用）
+                // setTimeout(() => {
+                //     alert("エラー: " + err.message);
+                // }, 1000);
             }
         }
         
@@ -374,8 +374,8 @@ liff.scanCodeV2: ${liff.scanCodeV2}`;
         
         // バージョン情報をコンソールに出力
         console.log('=== QRカメラ アプリ情報 ===');
-        console.log('Version: 1.5.0');
-        console.log('Build: 2024-01-15 21:10');
+        console.log('Version: 1.5.1');
+        console.log('Build: 2024-01-15 21:15');
         console.log('LIFF ID: 2007582016-vl416l5z');
         console.log('LIFF SDK: v2.26.1');
         console.log('API: scanCodeV2');
