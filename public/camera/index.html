@@ -119,10 +119,11 @@
         
         <!-- バージョン情報 -->
         <div style="margin-top: 30px; font-size: 12px; opacity: 0.7; text-align: center;">
-            <div>Version: 1.3.2</div>
-            <div>Build: 2024-01-15 21:00</div>
+            <div>Version: 1.4.0</div>
+            <div>Build: 2024-01-15 21:05</div>
             <div>LIFF ID: 2007582016-vl416l5z</div>
             <div>LIFF SDK: v2.26.1</div>
+            <div>API: scanCodeV2</div>
         </div>
     </div>
 
@@ -145,25 +146,25 @@
                     alert("isInClient: " + isInClient);
                 }, 1000);
                 
-                // scanCode API利用可能性チェック
-                console.log('scanCode API チェック開始');
-                console.log('typeof liff.scanCode:', typeof liff.scanCode);
-                console.log('liff.scanCode:', liff.scanCode);
+                // scanCodeV2 API利用可能性チェック
+                console.log('scanCodeV2 API チェック開始');
+                console.log('typeof liff.scanCodeV2:', typeof liff.scanCodeV2);
+                console.log('liff.scanCodeV2:', liff.scanCodeV2);
                 
                 // アラートでデバッグ情報を表示
-                const debugInfo = `scanCode API チェック結果:
-typeof liff.scanCode: ${typeof liff.scanCode}
-liff.scanCode: ${liff.scanCode}`;
+                const debugInfo = `scanCodeV2 API チェック結果:
+typeof liff.scanCodeV2: ${typeof liff.scanCodeV2}
+liff.scanCodeV2: ${liff.scanCodeV2}`;
                 
                 setTimeout(() => {
                     alert(debugInfo);
                 }, 2000);
                 
-                if (typeof liff.scanCode !== 'function') {
-                    console.warn('scanCode APIは利用できません。手動入力モードを使用します。');
+                if (typeof liff.scanCodeV2 !== 'function') {
+                    console.warn('scanCodeV2 APIは利用できません。手動入力モードを使用します。');
                     updateStatus('QRコードスキャン機能は利用できません。手動入力モードでご利用ください。', 'error');
                 } else {
-                    console.log('scanCode API利用可能！');
+                    console.log('scanCodeV2 API利用可能！');
                     updateStatus('カメラの準備ができました', 'success');
                 }
                 
@@ -199,12 +200,12 @@ liff.scanCode: ${liff.scanCode}`;
                     throw new Error('LINEアプリ内でのみ利用可能です');
                 }
                 
-                // scanCode APIの利用可能性チェック
-                if (typeof liff.scanCode !== 'function') {
-                    throw new Error('scanCode APIは利用できません。手動でQRコードを入力してください。');
+                // scanCodeV2 APIの利用可能性チェック
+                if (typeof liff.scanCodeV2 !== 'function') {
+                    throw new Error('scanCodeV2 APIは利用できません。手動でQRコードを入力してください。');
                 }
                 
-                const result = await liff.scanCode();
+                const result = await liff.scanCodeV2();
                 
                 console.log('スキャン結果:', result);
                 
@@ -232,7 +233,7 @@ liff.scanCode: ${liff.scanCode}`;
                     errorMessage = 'スキャンがキャンセルされました';
                 } else if (err.message.includes('LINEアプリ内')) {
                     errorMessage = 'LINEアプリ内でのみ利用可能です';
-                } else if (err.message.includes('scanCode API')) {
+                } else if (err.message.includes('scanCodeV2 API')) {
                     errorMessage = 'QRコードスキャン機能は利用できません。手動入力モードに切り替えます。';
                     showManualInputMode();
                 } else {
@@ -346,10 +347,11 @@ liff.scanCode: ${liff.scanCode}`;
         
         // バージョン情報をコンソールに出力
         console.log('=== QRカメラ アプリ情報 ===');
-        console.log('Version: 1.3.2');
-        console.log('Build: 2024-01-15 21:00');
+        console.log('Version: 1.4.0');
+        console.log('Build: 2024-01-15 21:05');
         console.log('LIFF ID: 2007582016-vl416l5z');
         console.log('LIFF SDK: v2.26.1');
+        console.log('API: scanCodeV2');
         console.log('========================');
     </script>
 </body>
