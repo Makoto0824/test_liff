@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>LIFFカメラ - QRコードスキャン</title>
-    <script src="https://static.line-scdn.net/liff/edge/versions/2.26.1/sdk.js"></script>
+    <script src="https://static.line-scdn.net/liff/edge/3/sdk.js"></script>
     <style>
         body {
             font-family: 'Hiragino Sans', 'ヒラギノ角ゴシック', sans-serif;
@@ -127,6 +127,12 @@
                 await liff.init({ liffId: LIFF_ID });
                 
                 console.log('LIFF初期化完了');
+                
+                // LIFF v3でのscanCode API利用可能性チェック
+                if (typeof liff.scanCode !== 'function') {
+                    throw new Error('scanCode APIは利用できません。LINEアプリ内でアクセスしてください。');
+                }
+                
                 updateStatus('カメラの準備ができました', 'success');
                 
                 // 少し待ってからステータスをクリア
@@ -202,13 +208,14 @@
                 console.log('スキャン結果をサーバーに送信:', result);
                 
                 // 例：Messaging APIで結果を送信
+                const profile = await liff.getProfile();
                 const response = await fetch('/api/send-message', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
                     },
                     body: JSON.stringify({
-                        userId: liff.getProfile().userId,
+                        userId: profile.userId,
                         messages: [{
                             type: 'text',
                             text: `QRコードスキャン結果: ${result.value}`
