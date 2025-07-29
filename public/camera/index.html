@@ -135,6 +135,15 @@
                 
                 console.log('LIFF初期化完了');
                 
+                // isInClient確認
+                const isInClient = liff.isInClient();
+                console.log('isInClient:', isInClient);
+                
+                // アラートで確認結果を表示
+                setTimeout(() => {
+                    alert("isInClient: " + isInClient);
+                }, 1000);
+                
                 // scanCode API利用可能性チェック
                 if (typeof liff.scanCode !== 'function') {
                     console.warn('scanCode APIは利用できません。手動入力モードを使用します。');
@@ -151,6 +160,11 @@
             } catch (err) {
                 console.error('LIFF初期化エラー:', err);
                 updateStatus(`初期化エラー: ${err.message}`, 'error');
+                
+                // エラー時もアラート表示
+                setTimeout(() => {
+                    alert("エラー: " + err.message);
+                }, 1000);
             }
         }
         
@@ -312,21 +326,8 @@
             }
         }
         
-        // 初期化
+        // 初期化（isInClient確認付き）
         init();
-        
-        // isInClient確認用スクリプト
-        async function checkIsInClient() {
-            try {
-                await liff.init({ liffId: "2007582016-vl416l5z" });
-                alert("isInClient: " + liff.isInClient());
-            } catch (err) {
-                alert("エラー: " + err.message);
-            }
-        }
-        
-        // ページ読み込み時に実行
-        checkIsInClient();
         
         // バージョン情報をコンソールに出力
         console.log('=== QRカメラ アプリ情報 ===');
