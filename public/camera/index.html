@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LIFFカメラ - QRコードスキャン</title>
+    <script src="https://static.line-scdn.net/liff/edge/versions/2.26.1/sdk.js"></script>
+    <style>
+        body {
+            font-family: 'Hiragino Sans', 'ヒラギノ角ゴシック', sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: white;
+        }
+        
+        .container {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
+            max-width: 400px;
+            width: 100%;
+            text-align: center;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+        
+        h1 {
+            margin-bottom: 30px;
+            font-size: 24px;
+            font-weight: 300;
+        }
+        
+        .btn {
+            background: rgba(255, 255, 255, 0.2);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            color: white;
+            padding: 15px 30px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 10px;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(5px);
+            width: 200px;
+        }
+        
+        .btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+        }
+        
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .status {
+            margin: 20px 0;
+            padding: 15px;
+            border-radius: 10px;
+            font-size: 14px;
+        }
+        
+        .status.loading {
+            background: rgba(255, 193, 7, 0.2);
+            border: 1px solid rgba(255, 193, 7, 0.5);
+        }
+        
+        .status.success {
+            background: rgba(40, 167, 69, 0.2);
+            border: 1px solid rgba(40, 167, 69, 0.5);
+        }
+        
+        .status.error {
+            background: rgba(220, 53, 69, 0.2);
+            border: 1px solid rgba(220, 53, 69, 0.5);
+        }
+        
+        .result {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 15px;
+            margin: 20px 0;
+            word-break: break-all;
+            font-family: monospace;
+            font-size: 12px;
+        }
+        
+        .camera-icon {
+            font-size: 48px;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="camera-icon">📸</div>
+        <h1>QRコードスキャン</h1>
+        
+        <div id="status" class="status" style="display: none;"></div>
+        
+        <button id="scanBtn" class="btn" onclick="startScan()">
+            📱 カメラを起動
+        </button>
+        
+        <button id="backBtn" class="btn" onclick="goBack()" style="background: rgba(108, 117, 125, 0.2);">
+            🔙 戻る
+        </button>
+        
+        <div id="result" class="result" style="display: none;"></div>
+    </div>
+
+    <script>
+        const LIFF_ID = "2007582016-3vVRvd17";
+        
+        async function init() {
+            try {
+                updateStatus('LIFF初期化中...', 'loading');
+                await liff.init({ liffId: LIFF_ID });
+                
+                console.log('LIFF初期化完了');
+                updateStatus('カメラの準備ができました', 'success');
+                
+                // 少し待ってからステータスをクリア
+                setTimeout(() => {
+                    clearStatus();
+                }, 2000);
+                
+            } catch (err) {
+                console.error('LIFF初期化エラー:', err);
+                updateStatus(`初期化エラー: ${err.message}`, 'error');
+            }
+        }
+        
+        async function startScan() {
+            const scanBtn = document.getElementById('scanBtn');
+            const resultDiv = document.getElementById('result');
+            
+            try {
+                scanBtn.disabled = true;
+                scanBtn.textContent = '📷 スキャン中...';
+                updateStatus('カメラを起動中...', 'loading');
+                
+                console.log('カメラ起動開始');
+                
+                // カメラ権限チェック
+                if (!liff.isInClient()) {
+                    throw new Error('LINEアプリ内でのみ利用可能です');
+                }
+                
+                const result = await liff.scanCode();
+                
+                console.log('スキャン結果:', result);
+                
+                // 結果を表示
+                resultDiv.style.display = 'block';
+                resultDiv.innerHTML = `
+                    <strong>スキャン成功！</strong><br>
+                    <strong>タイプ:</strong> ${result.type}<br>
+                    <strong>値:</strong> ${result.value}
+                `;
+                
+                updateStatus('スキャン完了！', 'success');
+                
+                // 結果をサーバーに送信（必要に応じて）
+                await sendScanResult(result);
+                
+            } catch (err) {
+                console.error('スキャンエラー:', err);
+                
+                let errorMessage = 'スキャンに失敗しました';
+                
+                if (err.message.includes('permission')) {
+                    errorMessage = 'カメラの権限が許可されていません';
+                } else if (err.message.includes('cancelled')) {
+                    errorMessage = 'スキャンがキャンセルされました';
+                } else if (err.message.includes('LINEアプリ内')) {
+                    errorMessage = 'LINEアプリ内でのみ利用可能です';
+                } else {
+                    errorMessage = `エラー: ${err.message}`;
+                }
+                
+                updateStatus(errorMessage, 'error');
+                
+            } finally {
+                scanBtn.disabled = false;
+                scanBtn.textContent = '📱 カメラを起動';
+            }
+        }
+        
+        async function sendScanResult(result) {
+            try {
+                // スキャン結果をサーバーに送信（必要に応じて実装）
+                console.log('スキャン結果をサーバーに送信:', result);
+                
+                // 例：Messaging APIで結果を送信
+                const response = await fetch('/api/send-message', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        userId: liff.getProfile().userId,
+                        messages: [{
+                            type: 'text',
+                            text: `QRコードスキャン結果: ${result.value}`
+                        }]
+                    })
+                });
+                
+                if (response.ok) {
+                    console.log('スキャン結果送信成功');
+                } else {
+                    console.warn('スキャン結果送信失敗');
+                }
+                
+            } catch (err) {
+                console.warn('スキャン結果送信エラー:', err);
+            }
+        }
+        
+        function updateStatus(message, type) {
+            const statusDiv = document.getElementById('status');
+            statusDiv.textContent = message;
+            statusDiv.className = `status ${type}`;
+            statusDiv.style.display = 'block';
+        }
+        
+        function clearStatus() {
+            const statusDiv = document.getElementById('status');
+            statusDiv.style.display = 'none';
+        }
+        
+        function goBack() {
+            if (liff.isInClient()) {
+                liff.closeWindow();
+            } else {
+                window.history.back();
+            }
+        }
+        
+        // 初期化
+        init();
+    </script>
+</body>
+
+</html>
