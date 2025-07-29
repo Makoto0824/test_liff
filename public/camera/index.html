@@ -307,6 +307,19 @@
         
         // 初期化
         init();
+        
+        // isInClient確認用スクリプト
+        async function checkIsInClient() {
+            try {
+                await liff.init({ liffId: "2007582016-vl416l5z" });
+                alert("isInClient: " + liff.isInClient());
+            } catch (err) {
+                alert("エラー: " + err.message);
+            }
+        }
+        
+        // ページ読み込み時に実行
+        checkIsInClient();
     </script>
 </body>
 
