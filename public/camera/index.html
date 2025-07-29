@@ -124,8 +124,8 @@
         
         <!-- バージョン情報 -->
         <div style="margin-top: 30px; font-size: 12px; opacity: 0.7; text-align: center;">
-            <div>Version: 1.5.1</div>
-            <div>Build: 2024-01-15 21:15</div>
+            <div>Version: 1.6.0</div>
+            <div>Build: 2024-01-15 21:20</div>
             <div>LIFF ID: 2007582016-vl416l5z</div>
             <div>LIFF SDK: v2.26.1</div>
             <div>API: scanCodeV2</div>
@@ -236,8 +236,8 @@
                 
                 updateStatus('スキャン完了！', 'success');
                 
-                // 結果をサーバーに送信（必要に応じて）
-                await sendScanResult(result);
+                // 結果をサーバーに送信
+                await sendScanResult(result, 'success');
                 
             } catch (err) {
                 console.error('スキャンエラー:', err);
@@ -246,8 +246,10 @@
                 
                 if (err.message.includes('permission')) {
                     errorMessage = 'カメラの権限が許可されていません';
-                } else if (err.message.includes('cancelled')) {
+                } else                 if (err.message.includes('cancelled')) {
                     errorMessage = 'スキャンがキャンセルされました';
+                    // キャンセル時はメッセージを送信しない
+                    await sendScanResult(null, 'cancelled');
                 } else if (err.message.includes('LINEアプリ内')) {
                     errorMessage = 'LINEアプリ内でのみ利用可能です';
                 } else if (err.message.includes('scanCodeV2 API')) {
@@ -291,7 +293,7 @@
             
             try {
                 const result = { type: 'manual', value: value };
-                await sendScanResult(result);
+                await sendScanResult(result, 'manual');
                 
                 updateStatus('手動入力完了！', 'success');
                 
@@ -307,13 +309,40 @@
             }
         }
         
-        async function sendScanResult(result) {
+        async function sendScanResult(result, action) {
             try {
-                // スキャン結果をサーバーに送信（必要に応じて実装）
-                console.log('スキャン結果をサーバーに送信:', result);
+                console.log('sendScanResult 呼び出し:', { result, action });
                 
-                // 例：Messaging APIで結果を送信
+                // キャンセル時はメッセージを送信しない
+                if (action === 'cancelled') {
+                    console.log('スキャンがキャンセルされました - メッセージ送信をスキップ');
+                    return;
+                }
+                
+                // 結果がない場合は送信しない
+                if (!result || !result.value) {
+                    console.log('結果がありません - メッセージ送信をスキップ');
+                    return;
+                }
+                
                 const profile = await liff.getProfile();
+                
+                // アクションに応じたメッセージを作成
+                let messageText = '';
+                switch (action) {
+                    case 'success':
+                        messageText = `📱 QRコードスキャン成功！
+🔍 タイプ: ${result.type}
+📄 内容: ${result.value}`;
+                        break;
+                    case 'manual':
+                        messageText = `✍️ 手動入力完了！
+📄 内容: ${result.value}`;
+                        break;
+                    default:
+                        messageText = `QRコードスキャン結果: ${result.value}`;
+                }
+                
                 const response = await fetch('/api/send-message', {
                     method: 'POST',
                     headers: {
@@ -323,15 +352,15 @@
                         userId: profile.userId,
                         messages: [{
                             type: 'text',
-                            text: `QRコードスキャン結果: ${result.value}`
+                            text: messageText
                         }]
                     })
                 });
                 
                 if (response.ok) {
-                    console.log('スキャン結果送信成功');
+                    console.log('スキャン結果送信成功:', action);
                 } else {
-                    console.warn('スキャン結果送信失敗');
+                    console.warn('スキャン結果送信失敗:', response.status);
                 }
                 
             } catch (err) {
@@ -374,8 +403,8 @@
         
         // バージョン情報をコンソールに出力
         console.log('=== QRカメラ アプリ情報 ===');
-        console.log('Version: 1.5.1');
-        console.log('Build: 2024-01-15 21:15');
+        console.log('Version: 1.6.0');
+        console.log('Build: 2024-01-15 21:20');
         console.log('LIFF ID: 2007582016-vl416l5z');
         console.log('LIFF SDK: v2.26.1');
         console.log('API: scanCodeV2');
