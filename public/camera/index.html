@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>LIFFカメラ - QRコードスキャン</title>
-    <script src="https://static.line-scdn.net/liff/edge/3/sdk.js"></script>
+    <script src="https://static.line-scdn.net/liff/edge/versions/2.26.1/sdk.js"></script>
     <style>
         body {
             font-family: 'Hiragino Sans', 'ヒラギノ角ゴシック', sans-serif;
@@ -128,17 +128,18 @@
                 
                 console.log('LIFF初期化完了');
                 
-                // LIFF v3でのscanCode API利用可能性チェック
+                // scanCode API利用可能性チェック
                 if (typeof liff.scanCode !== 'function') {
-                    throw new Error('scanCode APIは利用できません。LINEアプリ内でアクセスしてください。');
+                    console.warn('scanCode APIは利用できません。手動入力モードを使用します。');
+                    updateStatus('QRコードスキャン機能は利用できません。手動入力モードでご利用ください。', 'error');
+                } else {
+                    updateStatus('カメラの準備ができました', 'success');
                 }
-                
-                updateStatus('カメラの準備ができました', 'success');
                 
                 // 少し待ってからステータスをクリア
                 setTimeout(() => {
                     clearStatus();
-                }, 2000);
+                }, 3000);
                 
             } catch (err) {
                 console.error('LIFF初期化エラー:', err);
@@ -160,6 +161,11 @@
                 // カメラ権限チェック
                 if (!liff.isInClient()) {
                     throw new Error('LINEアプリ内でのみ利用可能です');
+                }
+                
+                // scanCode APIの利用可能性チェック
+                if (typeof liff.scanCode !== 'function') {
+                    throw new Error('scanCode APIは利用できません。手動でQRコードを入力してください。');
                 }
                 
                 const result = await liff.scanCode();
@@ -190,6 +196,9 @@
                     errorMessage = 'スキャンがキャンセルされました';
                 } else if (err.message.includes('LINEアプリ内')) {
                     errorMessage = 'LINEアプリ内でのみ利用可能です';
+                } else if (err.message.includes('scanCode API')) {
+                    errorMessage = 'QRコードスキャン機能は利用できません。手動入力モードに切り替えます。';
+                    showManualInputMode();
                 } else {
                     errorMessage = `エラー: ${err.message}`;
                 }
@@ -199,6 +208,48 @@
             } finally {
                 scanBtn.disabled = false;
                 scanBtn.textContent = '📱 カメラを起動';
+            }
+        }
+        
+        // 手動入力モードを表示
+        function showManualInputMode() {
+            const resultDiv = document.getElementById('result');
+            resultDiv.style.display = 'block';
+            resultDiv.innerHTML = `
+                <strong>手動入力モード</strong><br>
+                <input type="text" id="manualInput" placeholder="QRコードの内容を入力してください" 
+                       style="width: 100%; padding: 10px; margin: 10px 0; border-radius: 5px; border: 1px solid #ccc;">
+                <button onclick="submitManualInput()" class="btn" style="width: auto; margin: 5px;">
+                    ✅ 送信
+                </button>
+            `;
+        }
+        
+        // 手動入力を送信
+        async function submitManualInput() {
+            const input = document.getElementById('manualInput');
+            const value = input.value.trim();
+            
+            if (!value) {
+                updateStatus('値を入力してください', 'error');
+                return;
+            }
+            
+            try {
+                const result = { type: 'manual', value: value };
+                await sendScanResult(result);
+                
+                updateStatus('手動入力完了！', 'success');
+                
+                const resultDiv = document.getElementById('result');
+                resultDiv.innerHTML = `
+                    <strong>手動入力成功！</strong><br>
+                    <strong>値:</strong> ${value}
+                `;
+                
+            } catch (err) {
+                console.error('手動入力エラー:', err);
+                updateStatus('送信に失敗しました', 'error');
             }
         }
         
