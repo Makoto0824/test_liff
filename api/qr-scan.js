@@ -74,7 +74,7 @@ export default async function handler(req, res) {
             messagePayload = [
                 {
                     type: 'text',
-                    text: `📱 QRコードスキャン結果\n\n🔍 タイプ: ${scanResult.type}\n📄 内容: ${scanResult.value}`
+                    text: `QRコードが無事読み込まれました`
                 }
             ];
         }
