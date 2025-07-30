@@ -1,139 +1,72 @@
 <!DOCTYPE html>
 <html lang="ja">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>QRカメラ - LINE LIFF</title>
-    <script src="https://static.line-scdn.net/liff/edge/versions/2.26.1/sdk.js"></script>
+    <script charset="utf-8" src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
     <style>
         body {
-            font-family: 'Hiragino Sans', 'ヒラギノ角ゴシック', sans-serif;
             margin: 0;
             padding: 20px;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
             display: flex;
             flex-direction: column;
             align-items: center;
+            justify-content: center;
             color: white;
         }
-        
+
         .container {
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            border-radius: 20px;
-            padding: 30px;
+            text-align: center;
             max-width: 400px;
             width: 100%;
-            text-align: center;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
         }
-        
-        h1 {
-            margin-bottom: 30px;
-            font-size: 24px;
-            font-weight: 300;
-        }
-        
-        .btn {
-            background: rgba(255, 255, 255, 0.2);
-            border: 2px solid rgba(255, 255, 255, 0.3);
-            color: white;
-            padding: 15px 30px;
-            border-radius: 25px;
-            cursor: pointer;
-            font-size: 16px;
-            margin: 10px;
-            transition: all 0.3s ease;
-            backdrop-filter: blur(5px);
-            width: 200px;
-        }
-        
-        .btn:hover {
-            background: rgba(255, 255, 255, 0.3);
-            transform: translateY(-2px);
-        }
-        
-        .btn:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-            transform: none;
-        }
-        
-        .status {
-            margin: 20px 0;
-            padding: 15px;
-            border-radius: 10px;
-            font-size: 14px;
-        }
-        
-        .status.loading {
-            background: rgba(255, 193, 7, 0.2);
-            border: 1px solid rgba(255, 193, 7, 0.5);
-        }
-        
-        .status.success {
-            background: rgba(40, 167, 69, 0.2);
-            border: 1px solid rgba(40, 167, 69, 0.5);
-        }
-        
-        .status.error {
-            background: rgba(220, 53, 69, 0.2);
-            border: 1px solid rgba(220, 53, 69, 0.5);
-        }
-        
-        .result {
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 10px;
-            padding: 15px;
-            margin: 20px 0;
-            word-break: break-all;
-            font-family: monospace;
-            font-size: 12px;
-        }
-        
+
         .camera-icon {
-            font-size: 48px;
+            font-size: 80px;
             margin-bottom: 20px;
+            filter: drop-shadow(0 4px 8px rgba(0,0,0,0.3));
+        }
+
+        .title {
+            font-size: 28px;
+            font-weight: bold;
+            margin-bottom: 30px;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .status {
+            font-size: 18px;
+            margin-bottom: 20px;
+            padding: 15px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 10px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+
+        .version {
+            font-size: 12px;
+            opacity: 0.7;
+            margin-top: 30px;
         }
     </style>
 </head>
-
 <body>
-            <div class="container">
-            <div class="camera-icon">📸</div>
-            <h1>QRカメラ</h1>
-            
-            <div id="status" class="status" style="display: none;"></div>
-            
-            <!-- 自動起動中の表示 -->
-            <div id="autoStartMessage" style="text-align: center; margin: 20px 0; font-size: 16px; opacity: 0.8;">
-                カメラを起動中...
-            </div>
-            
-            <button id="scanBtn" class="btn" onclick="startScan()">
-                📱 カメラを起動
-            </button>
-            
-            <button id="backBtn" class="btn" onclick="goBack()" style="background: rgba(108, 117, 125, 0.2);">
-                🔙 戻る
-            </button>
-            
-            <button id="closeBtn" class="btn" onclick="closeLiff()" style="background: rgba(231, 76, 60, 0.8);">
-                ❌ 閉じる
-            </button>
-            
-            <div id="result" class="result" style="display: none;"></div>
+    <div class="container">
+        <div class="camera-icon">📷</div>
+        <div class="title">QRカメラ</div>
         
-        <!-- バージョン情報 -->
-        <div style="margin-top: 30px; font-size: 12px; opacity: 0.7; text-align: center;">
-            <div>Version: 1.8.4</div>
-            <div>Build: 2024-01-15 21:55</div>
-            <div>LIFF ID: 2007582016-vl416l5z</div>
-            <div>LIFF SDK: v2.26.1</div>
-            <div>API: scanCodeV2</div>
-            <div>Auto Start: Enabled</div>
+        <div class="status" id="status">
+            📷 カメラ起動中...
+        </div>
+        
+        <div class="version">
+            Version: 2.0.0<br>
+            Build: 2024-01-15 22:00
         </div>
     </div>
 
@@ -142,280 +75,75 @@
         
         async function init() {
             try {
-                updateStatus('LIFF初期化中...', 'loading');
+                console.log('LIFF初期化開始');
                 await liff.init({ liffId: LIFF_ID });
                 
                 console.log('LIFF初期化完了');
+                console.log('isInClient:', liff.isInClient());
                 
-                // isInClient確認
-                const isInClient = liff.isInClient();
-                console.log('isInClient:', isInClient);
-                
-                // アラートで確認結果を表示（デバッグ用）
-                // setTimeout(() => {
-                //     alert("isInClient: " + isInClient);
-                // }, 1000);
-                
-                // scanCodeV2 API利用可能性チェック
-                console.log('scanCodeV2 API チェック開始');
-                console.log('typeof liff.scanCodeV2:', typeof liff.scanCodeV2);
-                console.log('liff.scanCodeV2:', liff.scanCodeV2);
-                
-                // アラートでデバッグ情報を表示（デバッグ用）
-                // const debugInfo = `scanCodeV2 API チェック結果:
-                // typeof liff.scanCodeV2: ${typeof liff.scanCodeV2}
-                // liff.scanCodeV2: ${liff.scanCodeV2}`;
-                
-                // setTimeout(() => {
-                //     alert(debugInfo);
-                // }, 2000);
-                
+                // scanCodeV2 APIの利用可能性チェック
                 if (typeof liff.scanCodeV2 !== 'function') {
-                    console.warn('scanCodeV2 APIは利用できません。手動入力モードを使用します。');
-                    updateStatus('QRコードスキャン機能は利用できません。手動入力モードでご利用ください。', 'error');
-                } else {
-                    console.log('scanCodeV2 API利用可能！');
-                    updateStatus('カメラの準備ができました', 'success');
+                    throw new Error('scanCodeV2 APIは利用できません');
                 }
                 
-                // 少し待ってからステータスをクリア
+                console.log('scanCodeV2 API利用可能');
+                
+                // 自動カメラ起動
                 setTimeout(() => {
-                    clearStatus();
-                }, 3000);
-                
-                // 自動カメラ起動（scanCodeV2が利用可能な場合）
-                if (typeof liff.scanCodeV2 === 'function') {
-                    console.log('自動カメラ起動を開始します');
-                    // 自動起動時はボタンを非表示にする
-                    const scanBtn = document.getElementById('scanBtn');
-                    scanBtn.style.display = 'none';
-                    setTimeout(() => {
-                        startScan();
-                    }, 500); // 0.5秒後に自動起動（高速化）
-                }
+                    startScan();
+                }, 500);
                 
             } catch (err) {
-                console.error('LIFF初期化エラー:', err);
-                updateStatus(`初期化エラー: ${err.message}`, 'error');
-                
-                // エラー時もアラート表示（デバッグ用）
-                // setTimeout(() => {
-                //     alert("エラー: " + err.message);
-                // }, 1000);
+                console.error('初期化エラー:', err);
+                document.getElementById('status').textContent = `エラー: ${err.message}`;
             }
         }
         
         async function startScan() {
-            const scanBtn = document.getElementById('scanBtn');
-            const resultDiv = document.getElementById('result');
-            
             try {
-                // 自動起動メッセージを表示
-                showAutoStartMessage();
-                
-                scanBtn.disabled = true;
-                scanBtn.textContent = '📷 スキャン中...';
-                updateStatus('カメラを起動中...', 'loading');
-                
                 console.log('カメラ起動開始');
                 
-                // カメラ権限チェック
                 if (!liff.isInClient()) {
                     throw new Error('LINEアプリ内でのみ利用可能です');
-                }
-                
-                // scanCodeV2 APIの利用可能性チェック
-                if (typeof liff.scanCodeV2 !== 'function') {
-                    throw new Error('scanCodeV2 APIは利用できません。手動でQRコードを入力してください。');
                 }
                 
                 const result = await liff.scanCodeV2();
                 
                 console.log('スキャン結果:', result);
                 
-                // 結果の妥当性チェック
                 if (!result || !result.value) {
                     throw new Error('スキャン結果が無効です');
                 }
                 
-                // 結果を表示
-                resultDiv.style.display = 'block';
-                resultDiv.innerHTML = `
-                    <strong>スキャン成功！</strong><br>
-                    <strong>タイプ:</strong> ${result.type}<br>
-                    <strong>値:</strong> ${result.value}
-                `;
-                
-                updateStatus('スキャン完了！', 'success');
-                
                 // 結果をサーバーに送信
-                if (result && result.value) {
-                    await sendScanResult(result, 'success');
-                }
+                await sendScanResult(result);
                 
-                // URLが含まれている場合は自動で開く
-                const urlPattern = /https?:\/\/[^\s]+/g;
-                const urls = result.value ? result.value.match(urlPattern) : null;
-                if (urls && urls.length > 0) {
-                    const url = urls[0];
-                    console.log('URLを自動で開きます:', url);
-                    
-                    // ユーザーに確認
-                    const shouldOpen = confirm(`URLが検出されました：\n${url}\n\nこのURLを開きますか？`);
-                    
-                    if (shouldOpen) {
-                        // 少し待ってから開く（メッセージ送信を待つ）
-                        setTimeout(() => {
-                            if (liff.isInClient()) {
-                                // LINEアプリ内の場合は外部ブラウザで開く
-                                liff.openWindow({
-                                    url: url,
-                                    external: true
-                                });
-                            } else {
-                                // ブラウザの場合は直接開く
-                                window.open(url, '_blank');
-                            }
-                        }, 1000);
-                    }
-                }
-                
-                // スキャン完了後、少し待ってからLIFFを閉じる
+                // スキャン完了後、LIFFを閉じる
                 setTimeout(() => {
                     console.log('スキャン完了 - LIFFを閉じます');
                     if (liff.isInClient()) {
                         liff.closeWindow();
                     }
-                }, 3000); // 3秒後に自動で閉じる
+                }, 1000);
                 
             } catch (err) {
                 console.error('スキャンエラー:', err);
                 
-                let errorMessage = 'スキャンに失敗しました';
-                
-                if (err.message.includes('permission')) {
-                    errorMessage = 'カメラの権限が許可されていません';
-                } else if (err.message.includes('cancelled')) {
-                    errorMessage = 'スキャンがキャンセルされました';
-                    // キャンセル時はメッセージを送信しない
-                    await sendScanResult(null, 'cancelled');
-                    // 自動起動メッセージを非表示にする
-                    hideAutoStartMessage();
-                } else if (err.message.includes('LINEアプリ内')) {
-                    errorMessage = 'LINEアプリ内でのみ利用可能です';
-                } else if (err.message.includes('scanCodeV2 API')) {
-                    errorMessage = 'QRコードスキャン機能は利用できません。手動入力モードに切り替えます。';
-                    showManualInputMode();
-                } else {
-                    errorMessage = `エラー: ${err.message}`;
-                }
-                
-                updateStatus(errorMessage, 'error');
-                
-            } finally {
-                scanBtn.disabled = false;
-                scanBtn.textContent = '📱 カメラを起動';
-                // カメラ起動ボタンを再表示
-                scanBtn.style.display = 'block';
-            }
-        }
-        
-        // 手動入力モードを表示
-        function showManualInputMode() {
-            const resultDiv = document.getElementById('result');
-            const scanBtn = document.getElementById('scanBtn');
-            
-            resultDiv.style.display = 'block';
-            resultDiv.innerHTML = `
-                <strong>手動入力モード</strong><br>
-                <input type="text" id="manualInput" placeholder="QRコードの内容を入力してください" 
-                       style="width: 100%; padding: 10px; margin: 10px 0; border-radius: 5px; border: 1px solid #ccc;">
-                <button onclick="submitManualInput()" class="btn" style="width: auto; margin: 5px;">
-                    ✅ 送信
-                </button>
-            `;
-            
-            // カメラ起動ボタンを表示
-            scanBtn.style.display = 'block';
-            scanBtn.disabled = false;
-            scanBtn.textContent = '📱 カメラを起動';
-        }
-        
-        // 手動入力を送信
-        async function submitManualInput() {
-            const input = document.getElementById('manualInput');
-            const value = input.value.trim();
-            
-            if (!value) {
-                updateStatus('値を入力してください', 'error');
-                return;
-            }
-            
-            try {
-                const result = { type: 'manual', value: value };
-                await sendScanResult(result, 'manual');
-                
-                updateStatus('手動入力完了！', 'success');
-                
-                // URLが含まれている場合は自動で開く
-                const urlPattern = /https?:\/\/[^\s]+/g;
-                const urls = value.match(urlPattern);
-                if (urls && urls.length > 0) {
-                    const url = urls[0];
-                    console.log('手動入力でURLを自動で開きます:', url);
-                    
-                    // ユーザーに確認
-                    const shouldOpen = confirm(`URLが検出されました：\n${url}\n\nこのURLを開きますか？`);
-                    
-                    if (shouldOpen) {
-                        setTimeout(() => {
-                            if (liff.isInClient()) {
-                                liff.openWindow({
-                                    url: url,
-                                    external: true
-                                });
-                            } else {
-                                window.open(url, '_blank');
-                            }
-                        }, 1000);
-                    }
-                }
-                
-                // 手動入力完了後、少し待ってからLIFFを閉じる
-                setTimeout(() => {
-                    console.log('手動入力完了 - LIFFを閉じます');
+                if (err.message.includes('cancelled')) {
+                    console.log('スキャンがキャンセルされました - LIFFを閉じます');
+                    // キャンセル時はLIFFを閉じる
                     if (liff.isInClient()) {
                         liff.closeWindow();
                     }
-                }, 3000); // 3秒後に自動で閉じる
-                
-                const resultDiv = document.getElementById('result');
-                resultDiv.innerHTML = `
-                    <strong>手動入力成功！</strong><br>
-                    <strong>値:</strong> ${value}
-                `;
-                
-            } catch (err) {
-                console.error('手動入力エラー:', err);
-                updateStatus('送信に失敗しました', 'error');
+                } else {
+                    document.getElementById('status').textContent = `エラー: ${err.message}`;
+                }
             }
         }
         
-        async function sendScanResult(result, action) {
+        async function sendScanResult(result) {
             try {
-                console.log('sendScanResult 呼び出し:', { result, action });
-                
-                // キャンセル時はメッセージを送信しない
-                if (action === 'cancelled') {
-                    console.log('スキャンがキャンセルされました - メッセージ送信をスキップ');
-                    return;
-                }
-                
-                // 結果がない場合は送信しない
-                if (!result || !result.value) {
-                    console.log('結果がありません - メッセージ送信をスキップ');
-                    return;
-                }
+                console.log('スキャン結果を送信:', result);
                 
                 const profile = await liff.getProfile();
                 
@@ -431,7 +159,7 @@
                 });
                 
                 if (response.ok) {
-                    console.log('スキャン結果送信成功:', action);
+                    console.log('スキャン結果送信成功');
                 } else {
                     console.warn('スキャン結果送信失敗:', response.status);
                 }
@@ -441,59 +169,19 @@
             }
         }
         
-        function updateStatus(message, type) {
-            const statusDiv = document.getElementById('status');
-            statusDiv.textContent = message;
-            statusDiv.className = `status ${type}`;
-            statusDiv.style.display = 'block';
-        }
-        
-        function clearStatus() {
-            const statusDiv = document.getElementById('status');
-            statusDiv.style.display = 'none';
-        }
-        
-        function showAutoStartMessage() {
-            const autoStartDiv = document.getElementById('autoStartMessage');
-            autoStartDiv.style.display = 'block';
-            autoStartDiv.innerHTML = '📷 カメラを起動中...<br><small>（自動でカメラが開きます）</small>';
-        }
-        
-        function hideAutoStartMessage() {
-            const autoStartDiv = document.getElementById('autoStartMessage');
-            autoStartDiv.style.display = 'none';
-        }
-        
-        function goBack() {
-            if (liff.isInClient()) {
-                liff.closeWindow();
-            } else {
-                window.history.back();
-            }
-        }
-        
-        function closeLiff() {
-            console.log('手動でLIFFを閉じます');
-            if (liff.isInClient()) {
-                liff.closeWindow();
-            } else {
-                window.close();
-            }
-        }
-        
-        // 初期化（isInClient確認付き）
+        // 初期化
         init();
         
         // バージョン情報をコンソールに出力
         console.log('=== QRカメラ アプリ情報 ===');
-        console.log('Version: 1.8.4');
-        console.log('Build: 2024-01-15 21:55');
+        console.log('Version: 2.0.0');
+        console.log('Build: 2024-01-15 22:00');
         console.log('LIFF ID: 2007582016-vl416l5z');
         console.log('LIFF SDK: v2.26.1');
         console.log('API: scanCodeV2');
         console.log('Auto Start: Enabled');
+        console.log('Simple Mode: Enabled');
         console.log('========================');
     </script>
 </body>
-
 </html>
