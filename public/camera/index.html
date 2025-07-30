@@ -124,8 +124,8 @@
         
         <!-- バージョン情報 -->
         <div style="margin-top: 30px; font-size: 12px; opacity: 0.7; text-align: center;">
-            <div>Version: 1.6.0</div>
-            <div>Build: 2024-01-15 21:20</div>
+            <div>Version: 1.7.0</div>
+            <div>Build: 2024-01-15 21:25</div>
             <div>LIFF ID: 2007582016-vl416l5z</div>
             <div>LIFF SDK: v2.26.1</div>
             <div>API: scanCodeV2</div>
@@ -327,33 +327,14 @@
                 
                 const profile = await liff.getProfile();
                 
-                // アクションに応じたメッセージを作成
-                let messageText = '';
-                switch (action) {
-                    case 'success':
-                        messageText = `📱 QRコードスキャン成功！
-🔍 タイプ: ${result.type}
-📄 内容: ${result.value}`;
-                        break;
-                    case 'manual':
-                        messageText = `✍️ 手動入力完了！
-📄 内容: ${result.value}`;
-                        break;
-                    default:
-                        messageText = `QRコードスキャン結果: ${result.value}`;
-                }
-                
-                const response = await fetch('/api/send-message', {
+                const response = await fetch('/api/qr-scan', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
                     },
                     body: JSON.stringify({
                         userId: profile.userId,
-                        messages: [{
-                            type: 'text',
-                            text: messageText
-                        }]
+                        scanResult: result
                     })
                 });
                 
@@ -403,8 +384,8 @@
         
         // バージョン情報をコンソールに出力
         console.log('=== QRカメラ アプリ情報 ===');
-        console.log('Version: 1.6.0');
-        console.log('Build: 2024-01-15 21:20');
+        console.log('Version: 1.7.0');
+        console.log('Build: 2024-01-15 21:25');
         console.log('LIFF ID: 2007582016-vl416l5z');
         console.log('LIFF SDK: v2.26.1');
         console.log('API: scanCodeV2');

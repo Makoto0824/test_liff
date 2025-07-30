@@ -97,6 +97,13 @@ async function handlePostback(event, accessToken) {
                     text: '🤖 こんにちは！何かお手伝いできることはありますか？'
                 };
         }
+    } else if (data.includes('copy_url=')) {
+        // URLコピーのpostback処理
+        const url = decodeURIComponent(data.split('=')[1]);
+        replyMessage = {
+            type: 'text',
+            text: `📋 URLをコピーしました！\n\n🌐 ${url}\n\nこのURLをブラウザに貼り付けてアクセスしてください。`
+        };
     }
 
     // Messaging APIでレスポンス送信
