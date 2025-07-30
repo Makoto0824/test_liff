@@ -128,8 +128,8 @@
         
         <!-- バージョン情報 -->
         <div style="margin-top: 30px; font-size: 12px; opacity: 0.7; text-align: center;">
-            <div>Version: 1.8.1</div>
-            <div>Build: 2024-01-15 21:40</div>
+            <div>Version: 1.8.2</div>
+            <div>Build: 2024-01-15 21:45</div>
             <div>LIFF ID: 2007582016-vl416l5z</div>
             <div>LIFF SDK: v2.26.1</div>
             <div>API: scanCodeV2</div>
@@ -188,7 +188,7 @@
                     console.log('自動カメラ起動を開始します');
                     setTimeout(() => {
                         startScan();
-                    }, 1000); // 1秒後に自動起動
+                    }, 500); // 0.5秒後に自動起動（高速化）
                 }
                 
             } catch (err) {
@@ -435,6 +435,7 @@
         function showAutoStartMessage() {
             const autoStartDiv = document.getElementById('autoStartMessage');
             autoStartDiv.style.display = 'block';
+            autoStartDiv.innerHTML = '📷 カメラを起動中...<br><small>（自動でカメラが開きます）</small>';
         }
         
         function hideAutoStartMessage() {
@@ -464,8 +465,8 @@
         
         // バージョン情報をコンソールに出力
         console.log('=== QRカメラ アプリ情報 ===');
-        console.log('Version: 1.8.1');
-        console.log('Build: 2024-01-15 21:40');
+        console.log('Version: 1.8.2');
+        console.log('Build: 2024-01-15 21:45');
         console.log('LIFF ID: 2007582016-vl416l5z');
         console.log('LIFF SDK: v2.26.1');
         console.log('API: scanCodeV2');
