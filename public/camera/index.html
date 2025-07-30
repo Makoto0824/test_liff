@@ -128,8 +128,8 @@
         
         <!-- バージョン情報 -->
         <div style="margin-top: 30px; font-size: 12px; opacity: 0.7; text-align: center;">
-            <div>Version: 1.8.3</div>
-            <div>Build: 2024-01-15 21:50</div>
+            <div>Version: 1.8.4</div>
+            <div>Build: 2024-01-15 21:55</div>
             <div>LIFF ID: 2007582016-vl416l5z</div>
             <div>LIFF SDK: v2.26.1</div>
             <div>API: scanCodeV2</div>
@@ -233,6 +233,11 @@
                 
                 console.log('スキャン結果:', result);
                 
+                // 結果の妥当性チェック
+                if (!result || !result.value) {
+                    throw new Error('スキャン結果が無効です');
+                }
+                
                 // 結果を表示
                 resultDiv.style.display = 'block';
                 resultDiv.innerHTML = `
@@ -244,11 +249,13 @@
                 updateStatus('スキャン完了！', 'success');
                 
                 // 結果をサーバーに送信
-                await sendScanResult(result, 'success');
+                if (result && result.value) {
+                    await sendScanResult(result, 'success');
+                }
                 
                 // URLが含まれている場合は自動で開く
                 const urlPattern = /https?:\/\/[^\s]+/g;
-                const urls = result.value.match(urlPattern);
+                const urls = result.value ? result.value.match(urlPattern) : null;
                 if (urls && urls.length > 0) {
                     const url = urls[0];
                     console.log('URLを自動で開きます:', url);
@@ -479,8 +486,8 @@
         
         // バージョン情報をコンソールに出力
         console.log('=== QRカメラ アプリ情報 ===');
-        console.log('Version: 1.8.3');
-        console.log('Build: 2024-01-15 21:50');
+        console.log('Version: 1.8.4');
+        console.log('Build: 2024-01-15 21:55');
         console.log('LIFF ID: 2007582016-vl416l5z');
         console.log('LIFF SDK: v2.26.1');
         console.log('API: scanCodeV2');
