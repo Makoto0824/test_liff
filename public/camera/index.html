@@ -65,8 +65,8 @@
         </div>
         
         <div class="version">
-            Version: 2.0.1<br>
-            Build: 2024-01-15 22:05
+            Version: 2.0.2<br>
+            Build: 2024-01-15 22:10
         </div>
     </div>
 
@@ -111,8 +111,16 @@
                 
                 console.log('スキャン結果:', result);
                 
+                // キャンセル時はresultがnullやundefinedになる可能性がある
                 if (!result || !result.value) {
-                    throw new Error('スキャン結果が無効です');
+                    // キャンセルされたと判断してLIFFを閉じる
+                    console.log('スキャン結果が無効 - キャンセルされたと判断してLIFFを閉じます');
+                    if (liff.isInClient()) {
+                        liff.closeWindow();
+                    } else {
+                        window.close();
+                    }
+                    return; // 処理を終了
                 }
                 
                 // 結果をサーバーに送信
@@ -144,9 +152,6 @@
                     err.code === 'USER_CANCELLED') {
                     console.log('スキャンがキャンセルされました - LIFFを閉じます');
                     
-                    // デバッグ用アラート
-                    alert('キャンセルが検出されました。LIFFを閉じます。');
-                    
                     // キャンセル時はLIFFを閉じる
                     if (liff.isInClient()) {
                         liff.closeWindow();
@@ -154,7 +159,13 @@
                         window.close();
                     }
                 } else {
-                    document.getElementById('status').textContent = `エラー: ${err.message}`;
+                    // その他のエラーもキャンセルとして扱う（ユーザーが何らかの理由でキャンセルした可能性）
+                    console.log('その他のエラー - キャンセルとして扱ってLIFFを閉じます');
+                    if (liff.isInClient()) {
+                        liff.closeWindow();
+                    } else {
+                        window.close();
+                    }
                 }
             }
         }
@@ -192,8 +203,8 @@
         
         // バージョン情報をコンソールに出力
         console.log('=== QRカメラ アプリ情報 ===');
-        console.log('Version: 2.0.1');
-        console.log('Build: 2024-01-15 22:05');
+        console.log('Version: 2.0.2');
+        console.log('Build: 2024-01-15 22:10');
         console.log('LIFF ID: 2007582016-vl416l5z');
         console.log('LIFF SDK: v2.26.1');
         console.log('API: scanCodeV2');
