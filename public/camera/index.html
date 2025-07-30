@@ -65,8 +65,8 @@
         </div>
         
         <div class="version">
-            Version: 2.0.0<br>
-            Build: 2024-01-15 22:00
+            Version: 2.0.1<br>
+            Build: 2024-01-15 22:05
         </div>
     </div>
 
@@ -128,12 +128,30 @@
                 
             } catch (err) {
                 console.error('スキャンエラー:', err);
+                console.log('エラーメッセージ:', err.message);
+                console.log('エラーオブジェクト:', err);
                 
-                if (err.message.includes('cancelled')) {
+                // キャンセル時のエラーメッセージを詳細にチェック
+                if (err.message.includes('cancelled') || 
+                    err.message.includes('cancel') || 
+                    err.message.includes('user') ||
+                    err.message.includes('User') ||
+                    err.message.includes('CANCELLED') ||
+                    err.message.includes('Cancel') ||
+                    err.name === 'UserCancelError' ||
+                    err.name === 'CancelledError' ||
+                    err.code === 'CANCELLED' ||
+                    err.code === 'USER_CANCELLED') {
                     console.log('スキャンがキャンセルされました - LIFFを閉じます');
+                    
+                    // デバッグ用アラート
+                    alert('キャンセルが検出されました。LIFFを閉じます。');
+                    
                     // キャンセル時はLIFFを閉じる
                     if (liff.isInClient()) {
                         liff.closeWindow();
+                    } else {
+                        window.close();
                     }
                 } else {
                     document.getElementById('status').textContent = `エラー: ${err.message}`;
@@ -174,8 +192,8 @@
         
         // バージョン情報をコンソールに出力
         console.log('=== QRカメラ アプリ情報 ===');
-        console.log('Version: 2.0.0');
-        console.log('Build: 2024-01-15 22:00');
+        console.log('Version: 2.0.1');
+        console.log('Build: 2024-01-15 22:05');
         console.log('LIFF ID: 2007582016-vl416l5z');
         console.log('LIFF SDK: v2.26.1');
         console.log('API: scanCodeV2');
