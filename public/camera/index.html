@@ -120,12 +120,16 @@
                 🔙 戻る
             </button>
             
+            <button id="closeBtn" class="btn" onclick="closeLiff()" style="background: rgba(231, 76, 60, 0.8);">
+                ❌ 閉じる
+            </button>
+            
             <div id="result" class="result" style="display: none;"></div>
         
         <!-- バージョン情報 -->
         <div style="margin-top: 30px; font-size: 12px; opacity: 0.7; text-align: center;">
-            <div>Version: 1.8.0</div>
-            <div>Build: 2024-01-15 21:35</div>
+            <div>Version: 1.8.1</div>
+            <div>Build: 2024-01-15 21:40</div>
             <div>LIFF ID: 2007582016-vl416l5z</div>
             <div>LIFF SDK: v2.26.1</div>
             <div>API: scanCodeV2</div>
@@ -266,6 +270,14 @@
                     }
                 }
                 
+                // スキャン完了後、少し待ってからLIFFを閉じる
+                setTimeout(() => {
+                    console.log('スキャン完了 - LIFFを閉じます');
+                    if (liff.isInClient()) {
+                        liff.closeWindow();
+                    }
+                }, 3000); // 3秒後に自動で閉じる
+                
             } catch (err) {
                 console.error('スキャンエラー:', err);
                 
@@ -347,6 +359,14 @@
                         }, 1000);
                     }
                 }
+                
+                // 手動入力完了後、少し待ってからLIFFを閉じる
+                setTimeout(() => {
+                    console.log('手動入力完了 - LIFFを閉じます');
+                    if (liff.isInClient()) {
+                        liff.closeWindow();
+                    }
+                }, 3000); // 3秒後に自動で閉じる
                 
                 const resultDiv = document.getElementById('result');
                 resultDiv.innerHTML = `
@@ -430,13 +450,22 @@
             }
         }
         
+        function closeLiff() {
+            console.log('手動でLIFFを閉じます');
+            if (liff.isInClient()) {
+                liff.closeWindow();
+            } else {
+                window.close();
+            }
+        }
+        
         // 初期化（isInClient確認付き）
         init();
         
         // バージョン情報をコンソールに出力
         console.log('=== QRカメラ アプリ情報 ===');
-        console.log('Version: 1.8.0');
-        console.log('Build: 2024-01-15 21:35');
+        console.log('Version: 1.8.1');
+        console.log('Build: 2024-01-15 21:40');
         console.log('LIFF ID: 2007582016-vl416l5z');
         console.log('LIFF SDK: v2.26.1');
         console.log('API: scanCodeV2');
