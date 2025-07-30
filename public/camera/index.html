@@ -112,7 +112,7 @@
                 カメラを起動中...
             </div>
             
-            <button id="scanBtn" class="btn" onclick="startScan()" style="display: none;">
+            <button id="scanBtn" class="btn" onclick="startScan()">
                 📱 カメラを起動
             </button>
             
@@ -128,8 +128,8 @@
         
         <!-- バージョン情報 -->
         <div style="margin-top: 30px; font-size: 12px; opacity: 0.7; text-align: center;">
-            <div>Version: 1.8.2</div>
-            <div>Build: 2024-01-15 21:45</div>
+            <div>Version: 1.8.3</div>
+            <div>Build: 2024-01-15 21:50</div>
             <div>LIFF ID: 2007582016-vl416l5z</div>
             <div>LIFF SDK: v2.26.1</div>
             <div>API: scanCodeV2</div>
@@ -186,6 +186,9 @@
                 // 自動カメラ起動（scanCodeV2が利用可能な場合）
                 if (typeof liff.scanCodeV2 === 'function') {
                     console.log('自動カメラ起動を開始します');
+                    // 自動起動時はボタンを非表示にする
+                    const scanBtn = document.getElementById('scanBtn');
+                    scanBtn.style.display = 'none';
                     setTimeout(() => {
                         startScan();
                     }, 500); // 0.5秒後に自動起動（高速化）
@@ -285,10 +288,12 @@
                 
                 if (err.message.includes('permission')) {
                     errorMessage = 'カメラの権限が許可されていません';
-                } else                 if (err.message.includes('cancelled')) {
+                } else if (err.message.includes('cancelled')) {
                     errorMessage = 'スキャンがキャンセルされました';
                     // キャンセル時はメッセージを送信しない
                     await sendScanResult(null, 'cancelled');
+                    // 自動起動メッセージを非表示にする
+                    hideAutoStartMessage();
                 } else if (err.message.includes('LINEアプリ内')) {
                     errorMessage = 'LINEアプリ内でのみ利用可能です';
                 } else if (err.message.includes('scanCodeV2 API')) {
@@ -303,12 +308,16 @@
             } finally {
                 scanBtn.disabled = false;
                 scanBtn.textContent = '📱 カメラを起動';
+                // カメラ起動ボタンを再表示
+                scanBtn.style.display = 'block';
             }
         }
         
         // 手動入力モードを表示
         function showManualInputMode() {
             const resultDiv = document.getElementById('result');
+            const scanBtn = document.getElementById('scanBtn');
+            
             resultDiv.style.display = 'block';
             resultDiv.innerHTML = `
                 <strong>手動入力モード</strong><br>
@@ -318,6 +327,11 @@
                     ✅ 送信
                 </button>
             `;
+            
+            // カメラ起動ボタンを表示
+            scanBtn.style.display = 'block';
+            scanBtn.disabled = false;
+            scanBtn.textContent = '📱 カメラを起動';
         }
         
         // 手動入力を送信
@@ -465,8 +479,8 @@
         
         // バージョン情報をコンソールに出力
         console.log('=== QRカメラ アプリ情報 ===');
-        console.log('Version: 1.8.2');
-        console.log('Build: 2024-01-15 21:45');
+        console.log('Version: 1.8.3');
+        console.log('Build: 2024-01-15 21:50');
         console.log('LIFF ID: 2007582016-vl416l5z');
         console.log('LIFF SDK: v2.26.1');
         console.log('API: scanCodeV2');
