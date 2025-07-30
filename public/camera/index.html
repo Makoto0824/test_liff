@@ -124,8 +124,8 @@
         
         <!-- バージョン情報 -->
         <div style="margin-top: 30px; font-size: 12px; opacity: 0.7; text-align: center;">
-            <div>Version: 1.7.1</div>
-            <div>Build: 2024-01-15 21:30</div>
+            <div>Version: 1.8.0</div>
+            <div>Build: 2024-01-15 21:35</div>
             <div>LIFF ID: 2007582016-vl416l5z</div>
             <div>LIFF SDK: v2.26.1</div>
             <div>API: scanCodeV2</div>
@@ -239,6 +239,33 @@
                 // 結果をサーバーに送信
                 await sendScanResult(result, 'success');
                 
+                // URLが含まれている場合は自動で開く
+                const urlPattern = /https?:\/\/[^\s]+/g;
+                const urls = result.value.match(urlPattern);
+                if (urls && urls.length > 0) {
+                    const url = urls[0];
+                    console.log('URLを自動で開きます:', url);
+                    
+                    // ユーザーに確認
+                    const shouldOpen = confirm(`URLが検出されました：\n${url}\n\nこのURLを開きますか？`);
+                    
+                    if (shouldOpen) {
+                        // 少し待ってから開く（メッセージ送信を待つ）
+                        setTimeout(() => {
+                            if (liff.isInClient()) {
+                                // LINEアプリ内の場合は外部ブラウザで開く
+                                liff.openWindow({
+                                    url: url,
+                                    external: true
+                                });
+                            } else {
+                                // ブラウザの場合は直接開く
+                                window.open(url, '_blank');
+                            }
+                        }, 1000);
+                    }
+                }
+                
             } catch (err) {
                 console.error('スキャンエラー:', err);
                 
@@ -296,6 +323,30 @@
                 await sendScanResult(result, 'manual');
                 
                 updateStatus('手動入力完了！', 'success');
+                
+                // URLが含まれている場合は自動で開く
+                const urlPattern = /https?:\/\/[^\s]+/g;
+                const urls = value.match(urlPattern);
+                if (urls && urls.length > 0) {
+                    const url = urls[0];
+                    console.log('手動入力でURLを自動で開きます:', url);
+                    
+                    // ユーザーに確認
+                    const shouldOpen = confirm(`URLが検出されました：\n${url}\n\nこのURLを開きますか？`);
+                    
+                    if (shouldOpen) {
+                        setTimeout(() => {
+                            if (liff.isInClient()) {
+                                liff.openWindow({
+                                    url: url,
+                                    external: true
+                                });
+                            } else {
+                                window.open(url, '_blank');
+                            }
+                        }, 1000);
+                    }
+                }
                 
                 const resultDiv = document.getElementById('result');
                 resultDiv.innerHTML = `
@@ -384,8 +435,8 @@
         
         // バージョン情報をコンソールに出力
         console.log('=== QRカメラ アプリ情報 ===');
-        console.log('Version: 1.7.1');
-        console.log('Build: 2024-01-15 21:30');
+        console.log('Version: 1.8.0');
+        console.log('Build: 2024-01-15 21:35');
         console.log('LIFF ID: 2007582016-vl416l5z');
         console.log('LIFF SDK: v2.26.1');
         console.log('API: scanCodeV2');
