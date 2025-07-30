@@ -38,6 +38,13 @@
             box-shadow: 0 8px 32px rgba(0,0,0,0.1);
         }
 
+        .version {
+            font-size: 12px;
+            opacity: 0.7;
+            margin-top: 20px;
+            text-align: center;
+        }
+
 
     </style>
 </head>
@@ -45,6 +52,10 @@
     <div class="container">
         <div class="status" id="status">
             カメラ起動中...
+        </div>
+        
+        <div class="version">
+            Version: 2.0.5
         </div>
     </div>
 
@@ -206,8 +217,9 @@
         // 初期化
         init();
         
-        // アプリ情報をコンソールに出力
+        // バージョン情報をコンソールに出力
         console.log('=== QRカメラ アプリ情報 ===');
+        console.log('Version: 2.0.5');
         console.log('LIFF ID: 2007582016-vl416l5z');
         console.log('LIFF SDK: v2.26.1');
         console.log('API: scanCodeV2');
