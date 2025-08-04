@@ -17,7 +17,7 @@ module.exports = {
             "type": "image",
             "url": "https://test-liff-nu.vercel.app/images/cat.png",
             "size": "full",
-            "aspectRatio": "20:13",
+            "aspectRatio": "16:9",
             "aspectMode": "cover",
             "margin": "md"
           },
