@@ -491,7 +491,7 @@
     // Flex Message送信機能
     async function sendFlexMessage() {
         try {
-            console.log('🐱 Flex Message送信開始');
+            console.log('🎨 Flex Message送信開始');
             
             const profile = await liff.getProfile();
             console.log('ユーザー情報:', profile);
@@ -501,7 +501,7 @@
             flexBtn.disabled = true;
             flexBtn.textContent = '送信中...';
 
-            const response = await fetch('/api/send-flex-message', {
+            const response = await fetch('/api/send-multiple-flex', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -513,7 +513,7 @@
 
             if (response.ok) {
                 console.log('✅ Flex Message送信成功');
-                alert('🐱 CATRIP上野クーポンを送信しました！');
+                alert('🎨 2つのFlex Messageを送信しました！');
             } else {
                 console.error('❌ Flex Message送信失敗:', response.status);
                 alert('送信に失敗しました。もう一度お試しください。');
