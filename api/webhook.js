@@ -104,6 +104,55 @@ async function handlePostback(event, accessToken) {
             type: 'text',
             text: `📋 URLをコピーしました！\n\n🌐 ${url}\n\nこのURLをブラウザに貼り付けてアクセスしてください。`
         };
+    } else if (data.includes('coupon=catrip_ueno')) {
+        // 一括で受け取るボタンのpostback処理
+        replyMessage = {
+            type: 'flex',
+            altText: '受け取り確認',
+            contents: {
+                "type": "bubble",
+                "body": {
+                    "type": "box",
+                    "layout": "vertical",
+                    "contents": [
+                        {
+                            "type": "text",
+                            "text": "受け取り確認",
+                            "weight": "bold",
+                            "size": "lg",
+                            "align": "center"
+                        },
+                        {
+                            "type": "text",
+                            "text": "クーポンを受け取りましたか？",
+                            "size": "sm",
+                            "color": "#666666",
+                            "align": "center",
+                            "margin": "md"
+                        }
+                    ]
+                },
+                "footer": {
+                    "type": "box",
+                    "layout": "vertical",
+                    "spacing": "sm",
+                    "contents": [
+                        {
+                            "type": "button",
+                            "style": "primary",
+                            "height": "sm",
+                            "action": {
+                                "type": "postback",
+                                "label": "受け取ったよ！",
+                                "data": "confirm=received&message=これはダミーテキストです。ここに文章が入ります。これはダミーテキストです。ここに文章が入ります。これはダミーテキストです。ここに文章が入ります。これはダミーテキストです。ここに文章が入ります。",
+                                "displayText": "受け取ったよ！"
+                            }
+                        }
+                    ],
+                    "flex": 0
+                }
+            }
+        };
     } else if (data.includes('confirm=received')) {
         // 受け取ったよ！ボタンのpostback処理
         const messageMatch = data.match(/&message=(.+)/);
