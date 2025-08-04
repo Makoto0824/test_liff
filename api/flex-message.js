@@ -82,29 +82,14 @@ module.exports = {
     "contents": [
       {
         "type": "button",
-        "style": "link",
+        "style": "primary",
         "height": "sm",
         "action": {
-          "type": "uri",
-          "label": "一括受け取り",
-          "uri": "https://line.me/"
+          "type": "postback",
+          "label": "🎫 一括受け取り",
+          "data": "coupon=catrip_ueno",
+          "displayText": "クーポンを受け取りました！"
         }
-      },
-      {
-        "type": "button",
-        "style": "link",
-        "height": "sm",
-        "action": {
-          "type": "uri",
-          "label": "WEBSITE",
-          "uri": "https://line.me/"
-        }
-      },
-      {
-        "type": "box",
-        "layout": "vertical",
-        "contents": [],
-        "margin": "sm"
       }
     ],
     "flex": 0
