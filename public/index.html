@@ -131,8 +131,12 @@
             <button class="btn" onclick="shareApp()">
                 📤 アプリをシェア
             </button>
-            <button class="btn" onclick="sendMessage()" id="sendMessageBtn">
+            <button id="sendButton" onclick="sendMessage()" disabled>
                 💬 会話を始める
+            </button>
+            
+            <button id="flexButton" onclick="sendFlexMessage()" disabled style="margin-top: 10px;">
+                🐱 CATRIP上野クーポン送信
             </button>
         </div>
         
@@ -254,7 +258,7 @@
             console.log('sendMessage 関数が呼び出されました (Messaging API版)');
             
             // ボタンを無効化してダブルクリックを防ぐ
-            const btn = document.getElementById('sendMessageBtn');
+            const btn = document.getElementById('sendButton');
             if (btn) {
                 btn.disabled = true;
                 btn.textContent = '📤 送信中...';
@@ -378,7 +382,7 @@
         
         // ボタンリセット関数
         function resetSendButton() {
-            const btn = document.getElementById('sendMessageBtn');
+            const btn = document.getElementById('sendButton');
             if (btn) {
                 btn.disabled = false;
                 btn.textContent = '💬 会話を始める';
@@ -478,6 +482,48 @@
                 resetSendButton();
             }
         }
+
+    // Flex Message送信機能
+    async function sendFlexMessage() {
+        try {
+            console.log('🐱 Flex Message送信開始');
+            
+            const profile = await liff.getProfile();
+            console.log('ユーザー情報:', profile);
+
+            // ボタンを無効化
+            const flexBtn = document.getElementById('flexButton');
+            flexBtn.disabled = true;
+            flexBtn.textContent = '送信中...';
+
+            const response = await fetch('/api/send-flex-message', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    userId: profile.userId
+                })
+            });
+
+            if (response.ok) {
+                console.log('✅ Flex Message送信成功');
+                alert('🐱 CATRIP上野クーポンを送信しました！');
+            } else {
+                console.error('❌ Flex Message送信失敗:', response.status);
+                alert('送信に失敗しました。もう一度お試しください。');
+            }
+
+        } catch (error) {
+            console.error('Flex Message送信エラー:', error);
+            alert('エラーが発生しました: ' + error.message);
+        } finally {
+            // ボタンを復活
+            const flexBtn = document.getElementById('flexButton');
+            flexBtn.disabled = false;
+            flexBtn.textContent = '🐱 CATRIP上野クーポン送信';
+        }
+    }
     </script>
 </body>
 </html>
