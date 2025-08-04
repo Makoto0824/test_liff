@@ -198,6 +198,10 @@
         // コントロール表示
         function showControls() {
             controlsEl.classList.remove('hidden');
+            
+            // ボタンを有効化
+            document.getElementById('sendButton').disabled = false;
+            document.getElementById('flexButton').disabled = false;
         }
         
         // ユーザープロフィール取得
