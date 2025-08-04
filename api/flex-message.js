@@ -91,7 +91,7 @@ module.exports = {
         "height": "sm",
         "action": {
           "type": "postback",
-          "label": "一括受け取り",
+          "label": "一括で受け取る",
           "data": "coupon=catrip_ueno",
           "displayText": "受け取りました！"
         }
@@ -103,7 +103,7 @@ module.exports = {
         "action": {
           "type": "postback",
           "label": "受け取ったよ！",
-          "data": "confirm=received",
+          "data": "confirm=received&message=これはダミーテキストです。ここに文章が入ります。これはダミーテキストです。ここに文章が入ります。これはダミーテキストです。ここに文章が入ります。これはダミーテキストです。ここに文章が入ります。",
           "displayText": "受け取ったよ！"
         }
       }

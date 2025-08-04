@@ -104,6 +104,21 @@ async function handlePostback(event, accessToken) {
             type: 'text',
             text: `📋 URLをコピーしました！\n\n🌐 ${url}\n\nこのURLをブラウザに貼り付けてアクセスしてください。`
         };
+    } else if (data.includes('confirm=received')) {
+        // 受け取ったよ！ボタンのpostback処理
+        const messageMatch = data.match(/&message=(.+)/);
+        if (messageMatch) {
+            const message = decodeURIComponent(messageMatch[1]);
+            replyMessage = {
+                type: 'text',
+                text: message
+            };
+        } else {
+            replyMessage = {
+                type: 'text',
+                text: 'ありがとうございます！'
+            };
+        }
     }
 
     // Messaging APIでレスポンス送信
