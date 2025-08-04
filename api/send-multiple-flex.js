@@ -86,12 +86,6 @@ module.exports = async (req, res) => {
         altText: '受け取り確認',
         contents: {
           "type": "bubble",
-          "body": {
-            "type": "box",
-            "layout": "vertical",
-            "contents": [],
-            "margin": "none"
-          },
           "footer": {
             "type": "box",
             "layout": "vertical",
