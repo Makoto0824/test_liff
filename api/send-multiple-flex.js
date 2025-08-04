@@ -89,7 +89,8 @@ module.exports = async (req, res) => {
           "body": {
             "type": "box",
             "layout": "vertical",
-            "contents": []
+            "contents": [],
+            "margin": "none"
           },
           "footer": {
             "type": "box",
