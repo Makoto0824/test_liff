@@ -95,17 +95,6 @@ module.exports = {
           "data": "coupon=catrip_ueno",
           "displayText": "受け取りました！"
         }
-      },
-      {
-        "type": "button",
-        "style": "primary",
-        "height": "sm",
-        "action": {
-          "type": "postback",
-          "label": "受け取ったよ！",
-          "data": "confirm=received&message=これはダミーテキストです。ここに文章が入ります。これはダミーテキストです。ここに文章が入ります。これはダミーテキストです。ここに文章が入ります。これはダミーテキストです。ここに文章が入ります。",
-          "displayText": "受け取ったよ！"
-        }
       }
     ],
     "flex": 0
