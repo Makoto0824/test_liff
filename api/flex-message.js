@@ -1,16 +1,5 @@
 module.exports = {
   "type": "bubble",
-  "hero": {
-    "type": "image",
-    "url": "https://developers-resource.landpress.line.me/fx/img/01_1_cafe.png",
-    "size": "full",
-    "aspectRatio": "20:13",
-    "aspectMode": "cover",
-    "action": {
-      "type": "uri",
-      "uri": "https://line.me/"
-    }
-  },
   "body": {
     "type": "box",
     "layout": "vertical",
@@ -20,6 +9,22 @@ module.exports = {
         "text": "CATRIP上野",
         "weight": "bold",
         "size": "xl"
+      },
+      {
+        "type": "image",
+        "url": "https://test-liff-nu.vercel.app/images/cat.png",
+        "size": "full",
+        "aspectRatio": "20:13",
+        "aspectMode": "cover",
+        "margin": "md"
+      },
+      {
+        "type": "image",
+        "url": "https://test-liff-nu.vercel.app/images/ticket.png",
+        "size": "full",
+        "aspectRatio": "20:13",
+        "aspectMode": "cover",
+        "margin": "md"
       },
       {
         "type": "box",
