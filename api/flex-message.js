@@ -98,7 +98,7 @@ module.exports = {
       },
       {
         "type": "button",
-        "style": "secondary",
+        "style": "primary",
         "height": "sm",
         "action": {
           "type": "postback",
