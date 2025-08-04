@@ -168,6 +168,12 @@ async function handlePostback(event, accessToken) {
                 text: 'ありがとうございます！'
             };
         }
+    } else if (data.includes('confirm=understood')) {
+        // 了解ボタンのpostback処理
+        replyMessage = {
+            type: 'text',
+            text: '了解しました！何か他にご質問がございましたら、お気軽にお声がけください。'
+        };
     }
 
     // Messaging APIでレスポンス送信
