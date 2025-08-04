@@ -92,10 +92,7 @@ module.exports = {
         "action": {
           "type": "uri",
           "label": "一括で受け取る",
-          "uri": "https://test-liff-nu.vercel.app/?auto_send=true",
-          "altUri": {
-            "desktop": "https://test-liff-nu.vercel.app/?auto_send=true"
-          }
+          "uri": "https://test-liff-nu.vercel.app/coupon-receive"
         }
       }
     ],

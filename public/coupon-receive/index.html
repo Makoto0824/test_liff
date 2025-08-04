@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>クーポン受け取り</title>
+    <style>
+        body {
+            font-family: 'Hiragino Sans', 'ヒラギノ角ゴシック', sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: white;
+        }
+        
+        .container {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
+            max-width: 400px;
+            width: 100%;
+            text-align: center;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+        
+        h1 {
+            margin-bottom: 30px;
+            font-size: 24px;
+            font-weight: 300;
+        }
+        
+        .btn {
+            background: rgba(255, 255, 255, 0.2);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 10px;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(5px);
+        }
+        
+        .btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+        }
+        
+        .status {
+            margin: 20px 0;
+            padding: 10px;
+            border-radius: 10px;
+            font-size: 14px;
+        }
+        
+        .status.loading {
+            background: rgba(255, 193, 7, 0.2);
+            border: 1px solid rgba(255, 193, 7, 0.5);
+        }
+        
+        .status.success {
+            background: rgba(40, 167, 69, 0.2);
+            border: 1px solid rgba(40, 167, 69, 0.5);
+        }
+        
+        .status.error {
+            background: rgba(220, 53, 69, 0.2);
+            border: 1px solid rgba(220, 53, 69, 0.5);
+        }
+        
+        .version {
+            font-size: 12px;
+            opacity: 0.7;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎫 クーポン受け取り</h1>
+        
+        <div id="status" class="status">
+            クーポンを受け取りますか？
+        </div>
+        
+        <div id="controls" class="hidden">
+            <button class="btn" onclick="receiveCoupon()">
+                🎫 受け取る
+            </button>
+            
+            <button class="btn" onclick="closeApp()">
+                ❌ 閉じる
+            </button>
+        </div>
+        
+        <div class="version">
+            Version: 2.0.7
+        </div>
+    </div>
+
+    <!-- LIFF SDK -->
+    <script charset="utf-8" src="https://static.line-scdn.net/liff/edge/versions/2.26.1/sdk.js"></script>
+    
+    <script>
+        const LIFF_ID = "2007582016-3vVRvd17";
+        
+        const statusEl = document.getElementById('status');
+        const controlsEl = document.getElementById('controls');
+        
+        function updateStatus(message, type = 'loading') {
+            statusEl.textContent = message;
+            statusEl.className = `status ${type}`;
+        }
+        
+        // LIFF初期化
+        liff.init({
+            liffId: LIFF_ID
+        }).then(() => {
+            updateStatus('LIFF初期化成功！', 'success');
+            
+            if (liff.isLoggedIn()) {
+                updateStatus('クーポンを受け取りますか？', 'success');
+                showControls();
+            } else {
+                updateStatus('ログインが必要です', 'error');
+                liff.login();
+            }
+        }).catch((err) => {
+            console.error('LIFF初期化エラー:', err);
+            updateStatus(`初期化失敗: ${err.message}`, 'error');
+        });
+        
+        function showControls() {
+            controlsEl.classList.remove('hidden');
+        }
+        
+        async function receiveCoupon() {
+            try {
+                updateStatus('クーポン受け取り中...', 'loading');
+                
+                const profile = await liff.getProfile();
+                
+                // 受け取り確認Flex Messageを送信
+                const response = await fetch('/api/send-confirmation', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        userId: profile.userId
+                    })
+                });
+
+                if (response.ok) {
+                    updateStatus('クーポンを受け取りました！', 'success');
+                    
+                    // 少し待ってからLIFFを閉じる
+                    setTimeout(() => {
+                        if (liff.isInClient()) {
+                            liff.closeWindow();
+                        }
+                    }, 2000);
+                } else {
+                    updateStatus('受け取りに失敗しました', 'error');
+                }
+
+            } catch (error) {
+                console.error('クーポン受け取りエラー:', error);
+                updateStatus(`エラー: ${error.message}`, 'error');
+            }
+        }
+        
+        function closeApp() {
+            if (liff.isInClient()) {
+                liff.closeWindow();
+            } else {
+                updateStatus('LINEアプリ内でのみ利用可能', 'error');
+            }
+        }
+    </script>
+</body>
+</html> 
