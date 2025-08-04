@@ -124,7 +124,7 @@ async function handlePostback(event, accessToken) {
                         },
                         {
                             "type": "text",
-                            "text": "クーポンを受け取りましたか？",
+                            "text": "受け取りましたか？",
                             "size": "sm",
                             "color": "#666666",
                             "align": "center",
