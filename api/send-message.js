@@ -37,37 +37,47 @@ export default async function handler(req, res) {
 
         let messagePayload;
 
-        // 挨拶選択ボタンのTemplate Message
-        messagePayload = [
-            {
-                type: 'template',
-                altText: '挨拶を選択してください',
-                template: {
-                    type: 'buttons',
-                    text: '🤖 こんにちは！\n今の気分で挨拶を選んでください😊',
-                    actions: [
-                        {
-                            type: 'postback',
-                            label: '🌅 おはよう',
-                            data: 'greeting=morning',
-                            displayText: 'おはよう'
-                        },
-                        {
-                            type: 'postback',
-                            label: '☀️ こんにちは',
-                            data: 'greeting=afternoon',
-                            displayText: 'こんにちは'
-                        },
-                        {
-                            type: 'postback',
-                            label: '🌙 こんばんは',
-                            data: 'greeting=evening',
-                            displayText: 'こんばんは'
-                        }
-                    ]
+        if (messageType === 'auto' && req.body.message) {
+            // 自動メッセージ送信
+            messagePayload = [
+                {
+                    type: 'text',
+                    text: req.body.message
                 }
-            }
-        ];
+            ];
+        } else {
+            // 挨拶選択ボタンのTemplate Message
+            messagePayload = [
+                {
+                    type: 'template',
+                    altText: '挨拶を選択してください',
+                    template: {
+                        type: 'buttons',
+                        text: '🤖 こんにちは！\n今の気分で挨拶を選んでください😊',
+                        actions: [
+                            {
+                                type: 'postback',
+                                label: '🌅 おはよう',
+                                data: 'greeting=morning',
+                                displayText: 'おはよう'
+                            },
+                            {
+                                type: 'postback',
+                                label: '☀️ こんにちは',
+                                data: 'greeting=afternoon',
+                                displayText: 'こんにちは'
+                            },
+                            {
+                                type: 'postback',
+                                label: '🌙 こんばんは',
+                                data: 'greeting=evening',
+                                displayText: 'こんばんは'
+                            }
+                        ]
+                    }
+                }
+            ];
+        }
 
         console.log('Prepared Template Message:', JSON.stringify(messagePayload, null, 2));
 

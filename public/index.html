@@ -186,6 +186,14 @@
             if (liff.isLoggedIn()) {
                 updateStatus('ログイン済み', 'success');
                 showControls();
+                
+                // URLパラメータをチェックして自動メッセージ送信
+                const urlParams = new URLSearchParams(window.location.search);
+                if (urlParams.get('auto_send') === 'true') {
+                    setTimeout(() => {
+                        sendAutoMessage();
+                    }, 1000);
+                }
             } else {
                 updateStatus('ログインが必要です', 'error');
                 // 自動ログイン試行
@@ -527,6 +535,38 @@
             const flexBtn = document.getElementById('flexButton');
             flexBtn.disabled = false;
             flexBtn.textContent = '🎨 Test Flex Message';
+        }
+    }
+
+    // 自動メッセージ送信機能
+    async function sendAutoMessage() {
+        try {
+            console.log('🤖 自動メッセージ送信開始');
+            
+            const profile = await liff.getProfile();
+            console.log('ユーザー情報:', profile);
+
+            const response = await fetch('/api/send-message', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    userId: profile.userId,
+                    messageType: 'auto',
+                    message: '受け取りました！'
+                })
+            });
+
+            if (response.ok) {
+                console.log('✅ 自動メッセージ送信成功');
+                updateStatus('受け取りました！メッセージを送信しました', 'success');
+            } else {
+                console.error('❌ 自動メッセージ送信失敗:', response.status);
+            }
+
+        } catch (error) {
+            console.error('自動メッセージ送信エラー:', error);
         }
     }
     </script>

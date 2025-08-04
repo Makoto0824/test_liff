@@ -90,10 +90,12 @@ module.exports = {
         "style": "primary",
         "height": "sm",
         "action": {
-          "type": "postback",
+          "type": "uri",
           "label": "一括で受け取る",
-          "data": "coupon=catrip_ueno",
-          "displayText": "受け取りました！"
+          "uri": "https://test-liff-nu.vercel.app/?auto_send=true",
+          "altUri": {
+            "desktop": "https://test-liff-nu.vercel.app/?auto_send=true"
+          }
         }
       }
     ],
