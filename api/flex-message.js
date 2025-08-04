@@ -46,7 +46,7 @@ module.exports = {
               },
               {
                 "type": "text",
-                "text": "猫カフェで癒しの時間",
+                "text": "御朱印",
                 "wrap": true,
                 "color": "#666666",
                 "size": "sm",
@@ -68,7 +68,7 @@ module.exports = {
               },
               {
                 "type": "text",
-                "text": "入場料20%OFF",
+                "text": "入場料10%OFF",
                 "wrap": true,
                 "color": "#666666",
                 "size": "sm",
@@ -91,9 +91,9 @@ module.exports = {
         "height": "sm",
         "action": {
           "type": "postback",
-          "label": "🎫 一括受け取り",
+          "label": "一括受け取り",
           "data": "coupon=catrip_ueno",
-          "displayText": "クーポンを受け取りました！"
+          "displayText": "受け取りました！"
         }
       }
     ],
