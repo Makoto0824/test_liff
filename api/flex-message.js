@@ -22,7 +22,7 @@ module.exports = {
         "type": "image",
         "url": "https://test-liff-nu.vercel.app/images/ticket.png",
         "size": "full",
-        "aspectRatio": "1:1",
+        "aspectRatio": "16:9",
         "aspectMode": "cover",
         "margin": "md"
       },
