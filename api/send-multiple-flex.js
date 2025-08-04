@@ -19,98 +19,163 @@ module.exports = async (req, res) => {
       return res.status(400).json({ error: 'userId is required' });
     }
 
-    // 2つのFlex Messageを同時に送信
-    const multipleMessages = [
-      {
-        type: 'flex',
-        altText: 'CATRIP上野クーポン',
-        contents: {
-          "type": "bubble",
-          "body": {
-            "type": "box",
-            "layout": "vertical",
-            "contents": [
-              {
-                "type": "text",
-                "text": "CATRIP上野",
-                "weight": "bold",
-                "size": "xl"
-              },
-              {
-                "type": "image",
-                "url": "https://test-liff-nu.vercel.app/images/cat.png",
-                "size": "full",
-                "aspectRatio": "16:9",
-                "aspectMode": "cover",
-                "margin": "md"
-              },
-              {
-                "type": "image",
-                "url": "https://test-liff-nu.vercel.app/images/ticket.png",
-                "size": "full",
-                "aspectRatio": "16:9",
-                "aspectMode": "cover",
-                "margin": "md"
-              },
-              {
-                "type": "box",
-                "layout": "vertical",
-                "margin": "lg",
-                "spacing": "sm",
-                "contents": []
-              }
-            ]
+    // カルーセル形式で複数のFlex Messageを送信
+    const carouselMessage = {
+      type: 'flex',
+      altText: 'クーポン一覧',
+      contents: {
+        "type": "carousel",
+        "contents": [
+          {
+            "type": "bubble",
+            "body": {
+              "type": "box",
+              "layout": "vertical",
+              "contents": [
+                {
+                  "type": "text",
+                  "text": "CATRIP上野",
+                  "weight": "bold",
+                  "size": "xl"
+                },
+                {
+                  "type": "image",
+                  "url": "https://test-liff-nu.vercel.app/images/ticket.png",
+                  "size": "full",
+                  "aspectRatio": "16:9",
+                  "aspectMode": "cover",
+                  "margin": "md"
+                },
+                {
+                  "type": "box",
+                  "layout": "vertical",
+                  "margin": "lg",
+                  "spacing": "sm",
+                  "contents": []
+                }
+              ]
+            },
+            "footer": {
+              "type": "box",
+              "layout": "vertical",
+              "spacing": "sm",
+              "contents": [
+                {
+                  "type": "button",
+                  "style": "primary",
+                  "height": "sm",
+                  "action": {
+                    "type": "uri",
+                    "label": "受け取る",
+                    "uri": "https://test-liff-nu.vercel.app/coupon-receive"
+                  }
+                }
+              ],
+              "flex": 0
+            }
           },
-          "footer": {
-            "type": "box",
-            "layout": "vertical",
-            "spacing": "sm",
-            "contents": [
-              {
-                "type": "button",
-                "style": "primary",
-                "height": "sm",
-                "action": {
-                  "type": "uri",
-                  "label": "一括で受け取る",
-                  "uri": "https://test-liff-nu.vercel.app/coupon-receive"
+          {
+            "type": "bubble",
+            "body": {
+              "type": "box",
+              "layout": "vertical",
+              "contents": [
+                {
+                  "type": "text",
+                  "text": "CATRIP上野",
+                  "weight": "bold",
+                  "size": "xl"
+                },
+                {
+                  "type": "image",
+                  "url": "https://test-liff-nu.vercel.app/images/ticket.png",
+                  "size": "full",
+                  "aspectRatio": "16:9",
+                  "aspectMode": "cover",
+                  "margin": "md"
+                },
+                {
+                  "type": "box",
+                  "layout": "vertical",
+                  "margin": "lg",
+                  "spacing": "sm",
+                  "contents": []
                 }
-              }
-            ],
-            "flex": 0
-          }
-        }
-      },
-      {
-        type: 'flex',
-        altText: '受け取り確認',
-        contents: {
-          "type": "bubble",
-          "footer": {
-            "type": "box",
-            "layout": "vertical",
-            "spacing": "sm",
-            "contents": [
-              {
-                "type": "button",
-                "style": "primary",
-                "height": "sm",
-                "action": {
-                  "type": "postback",
-                  "label": "受け取ったよ！",
-                  "data": "confirm=received&message=これはダミーテキストです。ここに文章が入ります。これはダミーテキストです。ここに文章が入ります。これはダミーテキストです。ここに文章が入ります。これはダミーテキストです。ここに文章が入ります。",
-                  "displayText": "受け取ったよ！"
+              ]
+            },
+            "footer": {
+              "type": "box",
+              "layout": "vertical",
+              "spacing": "sm",
+              "contents": [
+                {
+                  "type": "button",
+                  "style": "primary",
+                  "height": "sm",
+                  "action": {
+                    "type": "uri",
+                    "label": "受け取る",
+                    "uri": "https://test-liff-nu.vercel.app/coupon-receive"
+                  }
                 }
-              }
-            ],
-            "flex": 0
+              ],
+              "flex": 0
+            }
+          },
+          {
+            "type": "bubble",
+            "body": {
+              "type": "box",
+              "layout": "vertical",
+              "contents": [
+                {
+                  "type": "text",
+                  "text": "CATRIP上野",
+                  "weight": "bold",
+                  "size": "xl"
+                },
+                {
+                  "type": "image",
+                  "url": "https://test-liff-nu.vercel.app/images/ticket.png",
+                  "size": "full",
+                  "aspectRatio": "16:9",
+                  "aspectMode": "cover",
+                  "margin": "md"
+                },
+                {
+                  "type": "box",
+                  "layout": "vertical",
+                  "margin": "lg",
+                  "spacing": "sm",
+                  "contents": []
+                }
+              ]
+            },
+            "footer": {
+              "type": "box",
+              "layout": "vertical",
+              "spacing": "sm",
+              "contents": [
+                {
+                  "type": "button",
+                  "style": "primary",
+                  "height": "sm",
+                  "action": {
+                    "type": "uri",
+                    "label": "受け取る",
+                    "uri": "https://test-liff-nu.vercel.app/coupon-receive"
+                  }
+                }
+              ],
+              "flex": 0
+            }
           }
-        }
+        ]
       }
-    ];
+    };
 
-    // LINE Messaging APIで2つのFlex Messageを同時送信
-    await client.pushMessage(userId, multipleMessages);
+    // LINE Messaging APIでカルーセルメッセージを送信
+    await client.pushMessage(userId, carouselMessage);
 
     res.status(200).json({ 
       success: true, 
