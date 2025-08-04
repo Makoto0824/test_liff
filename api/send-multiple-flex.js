@@ -57,52 +57,7 @@ module.exports = async (req, res) => {
                 "layout": "vertical",
                 "margin": "lg",
                 "spacing": "sm",
-                "contents": [
-                  {
-                    "type": "box",
-                    "layout": "baseline",
-                    "spacing": "sm",
-                    "contents": [
-                      {
-                        "type": "text",
-                        "text": "🐱",
-                        "color": "#aaaaaa",
-                        "size": "sm",
-                        "flex": 1
-                      },
-                      {
-                        "type": "text",
-                        "text": "御朱印",
-                        "wrap": true,
-                        "color": "#666666",
-                        "size": "sm",
-                        "flex": 5
-                      }
-                    ]
-                  },
-                  {
-                    "type": "box",
-                    "layout": "baseline",
-                    "spacing": "sm",
-                    "contents": [
-                      {
-                        "type": "text",
-                        "text": "🎫",
-                        "color": "#aaaaaa",
-                        "size": "sm",
-                        "flex": 1
-                      },
-                      {
-                        "type": "text",
-                        "text": "入場料10%OFF",
-                        "wrap": true,
-                        "color": "#666666",
-                        "size": "sm",
-                        "flex": 5
-                      }
-                    ]
-                  }
-                ]
+                "contents": []
               }
             ]
           },
@@ -134,23 +89,7 @@ module.exports = async (req, res) => {
           "body": {
             "type": "box",
             "layout": "vertical",
-            "contents": [
-              {
-                "type": "text",
-                "text": "受け取り確認",
-                "weight": "bold",
-                "size": "lg",
-                "align": "center"
-              },
-              {
-                "type": "text",
-                "text": "受け取りましたか？",
-                "size": "sm",
-                "color": "#666666",
-                "align": "center",
-                "margin": "md"
-              }
-            ]
+            "contents": []
           },
           "footer": {
             "type": "box",
