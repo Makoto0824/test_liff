@@ -30,12 +30,20 @@ module.exports = async (req, res) => {
           "layout": "vertical",
           "contents": [
             {
-              "type": "text",
-              "text": "これはダミーのテキストです。ここに文章が入ります。",
-              "size": "md",
-              "color": "#666666",
-              "wrap": true,
-              "margin": "md"
+              "type": "box",
+              "layout": "vertical",
+              "contents": [
+                {
+                  "type": "text",
+                  "text": "これはダミーのテキストです。ここに文章が入ります。",
+                  "size": "md",
+                  "color": "#666666",
+                  "wrap": true,
+                  "margin": "md"
+                }
+              ],
+              "paddingAll": "20px",
+              "paddingBottom": "0px"
             },
             {
               "type": "image",
@@ -45,9 +53,7 @@ module.exports = async (req, res) => {
               "margin": "none"
             }
           ],
-          "paddingAll": "20px",
-          "paddingTop": "20px",
-          "paddingBottom": "0px"
+          "paddingAll": "0px"
         },
         "footer": {
           "type": "box",
