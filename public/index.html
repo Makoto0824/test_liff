@@ -142,6 +142,10 @@
             <button class="btn" id="carouselButton" onclick="sendCarouselMessage()" disabled>
                 🎠 並列Flex Message
             </button>
+            
+            <button class="btn" id="dummyButton" onclick="sendDummyMessage()" disabled>
+                📝 ダミーテキスト
+            </button>
         </div>
         
         <div id="debug-info" style="margin-top: 20px; font-size: 12px; opacity: 0.7;">
@@ -208,6 +212,7 @@
             document.getElementById('sendButton').disabled = false;
             document.getElementById('flexButton').disabled = false;
             document.getElementById('carouselButton').disabled = false;
+            document.getElementById('dummyButton').disabled = false;
         }
         
         // ユーザープロフィール取得
@@ -574,6 +579,48 @@
             const carouselBtn = document.getElementById('carouselButton');
             carouselBtn.disabled = false;
             carouselBtn.textContent = '🎠 並列Flex Message';
+        }
+    }
+
+    // ダミーテキスト送信機能
+    async function sendDummyMessage() {
+        try {
+            console.log('📝 ダミーテキスト送信開始');
+            
+            const profile = await liff.getProfile();
+            console.log('ユーザー情報:', profile);
+
+            // ボタンを無効化
+            const dummyBtn = document.getElementById('dummyButton');
+            dummyBtn.disabled = true;
+            dummyBtn.textContent = '送信中...';
+
+            const response = await fetch('/api/send-dummy-flex', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    userId: profile.userId
+                })
+            });
+
+            if (response.ok) {
+                console.log('✅ ダミーテキスト送信成功');
+                alert('📝 ダミーテキストを送信しました！');
+            } else {
+                console.error('❌ ダミーテキスト送信失敗:', response.status);
+                alert('送信に失敗しました。もう一度お試しください。');
+            }
+
+        } catch (error) {
+            console.error('ダミーテキスト送信エラー:', error);
+            alert('エラーが発生しました: ' + error.message);
+        } finally {
+            // ボタンを復活
+            const dummyBtn = document.getElementById('dummyButton');
+            dummyBtn.disabled = false;
+            dummyBtn.textContent = '📝 ダミーテキスト';
         }
     }
     </script>
