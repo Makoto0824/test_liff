@@ -48,10 +48,19 @@ module.exports = async (req, res) => {
               "type": "image",
               "url": "https://test-liff-nu.vercel.app/images/cat_fukidashi.png",
               "size": "full",
-              "aspectMode": "fit",
+              "aspectMode": "cover",
               "margin": "none"
             }
-          ]
+          ],
+          "paddingAll": "0px",
+          "paddingTop": "20px",
+          "paddingBottom": "0px"
+        },
+        "footer": {
+          "type": "box",
+          "layout": "vertical",
+          "contents": [],
+          "paddingAll": "0px"
         }
       }
     };
