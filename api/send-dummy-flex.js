@@ -45,7 +45,7 @@ module.exports = async (req, res) => {
               "margin": "none"
             }
           ],
-          "paddingAll": "0px",
+          "paddingAll": "20px",
           "paddingTop": "20px",
           "paddingBottom": "0px"
         },
