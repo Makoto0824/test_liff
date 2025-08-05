@@ -31,13 +31,6 @@ module.exports = async (req, res) => {
           "contents": [
             {
               "type": "text",
-              "text": "ダミーメッセージ",
-              "weight": "bold",
-              "size": "lg",
-              "color": "#1DB446"
-            },
-            {
-              "type": "text",
               "text": "これはダミーのテキストです。ここに文章が入ります。",
               "size": "md",
               "color": "#666666",
