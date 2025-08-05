@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LIFF コードリーダー起動QR</title>
+    <style>
+        body {
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .container {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            text-align: center;
+            max-width: 500px;
+            width: 100%;
+        }
+        
+        h1 {
+            color: #333;
+            margin-bottom: 30px;
+            font-size: 24px;
+        }
+        
+        .qr-container {
+            margin: 30px 0;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 15px;
+        }
+        
+        .qr-code {
+            width: 200px;
+            height: 200px;
+            margin: 0 auto;
+            background: white;
+            padding: 10px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .description {
+            color: #666;
+            margin: 20px 0;
+            line-height: 1.6;
+        }
+        
+        .liff-url {
+            background: #e9ecef;
+            padding: 15px;
+            border-radius: 10px;
+            font-family: monospace;
+            font-size: 12px;
+            word-break: break-all;
+            margin: 20px 0;
+            color: #495057;
+        }
+        
+        .version {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: rgba(255,255,255,0.9);
+            padding: 10px 15px;
+            border-radius: 20px;
+            font-size: 12px;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📱 LIFF コードリーダー起動QR</h1>
+        
+        <div class="description">
+            <p>このQRコードをスキャンすると、LIFFのコードリーダーが起動します。</p>
+            <p>LINEアプリ内でスキャンしてください。</p>
+        </div>
+        
+        <div class="qr-container">
+            <div class="qr-code" id="qrCode"></div>
+        </div>
+        
+        <div class="liff-url" id="liffUrl">
+            LIFF URL: 読み込み中...
+        </div>
+        
+        <div class="description">
+            <p><strong>使用方法：</strong></p>
+            <ol style="text-align: left; display: inline-block;">
+                <li>LINEアプリを開く</li>
+                <li>QRコードをスキャン</li>
+                <li>LIFFアプリが起動</li>
+                <li>コードリーダーが自動起動</li>
+            </ol>
+        </div>
+    </div>
+    
+    <div class="version">
+        Version: 1.0.0
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
+    <script>
+        // LIFF URL（カメラアプリのLIFF ID）
+        const LIFF_ID = '2007582016-vl416l5z';
+        const LIFF_URL = `https://liff.line.me/${LIFF_ID}`;
+        
+        // QRコード生成
+        function generateQRCode() {
+            const qrContainer = document.getElementById('qrCode');
+            const urlContainer = document.getElementById('liffUrl');
+            
+            // URL表示
+            urlContainer.textContent = `LIFF URL: ${LIFF_URL}`;
+            
+            // QRコード生成
+            QRCode.toCanvas(qrContainer, LIFF_URL, {
+                width: 180,
+                margin: 2,
+                color: {
+                    dark: '#000000',
+                    light: '#FFFFFF'
+                }
+            }, function (error) {
+                if (error) {
+                    console.error('QRコード生成エラー:', error);
+                    qrContainer.innerHTML = '<p style="color: red;">QRコード生成に失敗しました</p>';
+                } else {
+                    console.log('QRコード生成成功');
+                }
+            });
+        }
+        
+        // ページ読み込み時にQRコード生成
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('=== LIFF コードリーダー起動QR ===');
+            console.log('Version: 1.0.0');
+            console.log('LIFF ID:', LIFF_ID);
+            console.log('LIFF URL:', LIFF_URL);
+            
+            generateQRCode();
+        });
+    </script>
+</body>
+</html> 
