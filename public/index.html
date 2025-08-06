@@ -652,14 +652,8 @@
     // JRE Walletアプリを開く
     function openJREWallet() {
         if (liff.isInClient()) {
-            // カスタムURLスキームでJRE Walletアプリを開く
-            const callbackUrl = encodeURIComponent('https://test-liff-nu.vercel.app/');
-            const jreWalletUrl = `jrewallet://?callbackUrl=${callbackUrl}`;
-            
-            liff.openWindow({
-                url: jreWalletUrl,
-                external: true
-            });
+            // シンプル起動
+            window.location.href = "jrewallet://";
         } else {
             updateStatus('LINEアプリ内でのみ利用可能', 'error');
         }
