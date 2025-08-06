@@ -146,6 +146,10 @@
             <button class="btn" id="dummyButton" onclick="sendDummyMessage()" disabled>
                 📝 ダミーテキスト
             </button>
+            
+            <button class="btn" id="walletButton" onclick="openWallet()" disabled>
+                💳 JRE Wallet
+            </button>
         </div>
         
         <div id="debug-info" style="margin-top: 20px; font-size: 12px; opacity: 0.7;">
@@ -213,6 +217,7 @@
             document.getElementById('flexButton').disabled = false;
             document.getElementById('carouselButton').disabled = false;
             document.getElementById('dummyButton').disabled = false;
+            document.getElementById('walletButton').disabled = false;
         }
         
         // ユーザープロフィール取得
@@ -621,6 +626,18 @@
             const dummyBtn = document.getElementById('dummyButton');
             dummyBtn.disabled = false;
             dummyBtn.textContent = '📝 ダミーテキスト';
+        }
+    }
+
+    // JRE Walletを開く
+    function openWallet() {
+        if (liff.isInClient()) {
+            liff.openWindow({
+                url: 'https://test-liff-nu.vercel.app/jrewallet/',
+                external: true
+            });
+        } else {
+            updateStatus('LINEアプリ内でのみ利用可能', 'error');
         }
     }
     </script>
