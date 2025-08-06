@@ -653,7 +653,7 @@
     function openJREWallet() {
         if (liff.isInClient()) {
             // カスタムURLスキームでJRE Walletアプリを開く
-            const jreWalletUrl = 'jrewallet://?clientId=xxx&callbackUrl=xxx://&external_user_id=xxx&state=xxx';
+            const jreWalletUrl = 'jrewallet://';
             
             liff.openWindow({
                 url: jreWalletUrl,
