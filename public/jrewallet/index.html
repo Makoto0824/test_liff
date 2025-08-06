@@ -137,6 +137,10 @@
                 💬 メッセージ送信
             </button>
             
+            <button class="btn" id="appStoreButton" onclick="openAppStore()">
+                📱 App Storeで開く
+            </button>
+            
             <button class="btn" id="closeButton" onclick="closeApp()">
                 ❌ アプリを閉じる
             </button>
@@ -240,6 +244,22 @@
                 liff.closeWindow();
             } else {
                 updateStatus('LINEアプリ内でのみ閉じることができます', 'error');
+            }
+        }
+        
+        // App Storeで開く
+        function openAppStore() {
+            const appStoreUrl = 'https://apps.apple.com/jp/app/jre-wallet/id1474201696';
+            
+            if (liff.isInClient()) {
+                // LINEアプリ内では外部ブラウザで開く
+                liff.openWindow({
+                    url: appStoreUrl,
+                    external: true
+                });
+            } else {
+                // 外部ブラウザでは直接開く
+                window.open(appStoreUrl, '_blank');
             }
         }
         
