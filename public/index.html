@@ -651,11 +651,14 @@
     
     // JRE Walletアプリを開く
     function openJREWallet() {
+        const url =
+            "jrewallet://?clientId=YOUR_CLIENT_ID" +
+            "&callbackUrl=https%3A%2F%2Fliff.line.me%2F2007582016-3vVRvd17";
+
         if (liff.isInClient()) {
-            // シンプル起動
-            window.location.href = "jrewallet://";
+            window.location.href = url;
         } else {
-            updateStatus('LINEアプリ内でのみ利用可能', 'error');
+            alert("LINEアプリ内でのみ利用できます");
         }
     }
     </script>
