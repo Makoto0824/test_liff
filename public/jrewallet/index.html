@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JRE Wallet</title>
+    <script charset="utf-8" src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
+    <style>
+        body {
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            min-height: 100vh;
+            color: white;
+        }
+        
+        .container {
+            max-width: 400px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        
+        .header {
+            margin-bottom: 40px;
+        }
+        
+        .logo {
+            font-size: 32px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        
+        .subtitle {
+            font-size: 16px;
+            opacity: 0.8;
+        }
+        
+        .wallet-card {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .balance {
+            font-size: 48px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        
+        .currency {
+            font-size: 18px;
+            opacity: 0.8;
+        }
+        
+        .btn {
+            background: linear-gradient(45deg, #ff6b6b, #ee5a24);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 25px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            margin: 10px;
+            transition: transform 0.2s;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+        }
+        
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .status {
+            margin: 20px 0;
+            padding: 15px;
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            display: none;
+        }
+        
+        .status.show {
+            display: block;
+        }
+        
+        .status.success {
+            background: rgba(46, 204, 113, 0.2);
+            border: 1px solid rgba(46, 204, 113, 0.5);
+        }
+        
+        .status.error {
+            background: rgba(231, 76, 60, 0.2);
+            border: 1px solid rgba(231, 76, 60, 0.5);
+        }
+        
+        .version {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: rgba(255,255,255,0.1);
+            padding: 10px 15px;
+            border-radius: 20px;
+            font-size: 12px;
+            opacity: 0.7;
+        }
+        
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="logo">💳 JRE Wallet</div>
+            <div class="subtitle">JR東日本ウォレット</div>
+        </div>
+        
+        <div class="wallet-card">
+            <div class="balance">¥12,580</div>
+            <div class="currency">残高</div>
+        </div>
+        
+        <div id="status" class="status"></div>
+        
+        <div id="controls" class="hidden">
+            <button class="btn" id="sendButton" onclick="sendMessage()">
+                💬 メッセージ送信
+            </button>
+            
+            <button class="btn" id="closeButton" onclick="closeApp()">
+                ❌ アプリを閉じる
+            </button>
+        </div>
+    </div>
+    
+    <div class="version">
+        Version: 1.0.0
+    </div>
+
+    <script>
+        // LIFF ID
+        const LIFF_ID = '2007582016-vl416l5z';
+        
+        // ステータス表示
+        const statusEl = document.getElementById('status');
+        const controlsEl = document.getElementById('controls');
+        
+        function updateStatus(message, type = 'info') {
+            statusEl.textContent = message;
+            statusEl.className = `status show ${type}`;
+        }
+        
+        function showControls() {
+            controlsEl.classList.remove('hidden');
+        }
+        
+        // LIFF初期化
+        async function initializeLiff() {
+            try {
+                console.log('=== JRE Wallet アプリ情報 ===');
+                console.log('Version: 1.0.0');
+                console.log('LIFF ID:', LIFF_ID);
+                
+                await liff.init({ liffId: LIFF_ID });
+                console.log('✅ LIFF初期化成功');
+                
+                if (liff.isLoggedIn()) {
+                    console.log('✅ ログイン済み');
+                    showControls();
+                } else {
+                    console.log('❌ 未ログイン');
+                    updateStatus('ログインが必要です', 'error');
+                }
+                
+            } catch (error) {
+                console.error('❌ LIFF初期化エラー:', error);
+                updateStatus('初期化に失敗しました: ' + error.message, 'error');
+            }
+        }
+        
+        // メッセージ送信
+        async function sendMessage() {
+            try {
+                console.log('💬 メッセージ送信開始');
+                
+                const profile = await liff.getProfile();
+                console.log('ユーザー情報:', profile);
+
+                const sendBtn = document.getElementById('sendButton');
+                sendBtn.disabled = true;
+                sendBtn.textContent = '送信中...';
+
+                const response = await fetch('/api/send-message', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        userId: profile.userId,
+                        messages: [
+                            {
+                                type: 'text',
+                                text: 'JRE Walletからメッセージを送信しました！'
+                            }
+                        ]
+                    })
+                });
+
+                if (response.ok) {
+                    console.log('✅ メッセージ送信成功');
+                    updateStatus('メッセージを送信しました！', 'success');
+                } else {
+                    console.error('❌ メッセージ送信失敗:', response.status);
+                    updateStatus('送信に失敗しました', 'error');
+                }
+
+            } catch (error) {
+                console.error('メッセージ送信エラー:', error);
+                updateStatus('エラーが発生しました: ' + error.message, 'error');
+            } finally {
+                const sendBtn = document.getElementById('sendButton');
+                sendBtn.disabled = false;
+                sendBtn.textContent = '💬 メッセージ送信';
+            }
+        }
+        
+        // アプリを閉じる
+        function closeApp() {
+            if (liff.isInClient()) {
+                liff.closeWindow();
+            } else {
+                updateStatus('LINEアプリ内でのみ閉じることができます', 'error');
+            }
+        }
+        
+        // ページ読み込み時にLIFF初期化
+        document.addEventListener('DOMContentLoaded', initializeLiff);
+    </script>
+</body>
+</html> 
