@@ -634,10 +634,10 @@
     // JRE Walletを開く
     function openWallet() {
         if (liff.isInClient()) {
-            // LIFF URLで遷移（LINE内で完結）
+            // 外部URLで遷移
             liff.openWindow({
-                url: 'https://liff.line.me/2007582016-xxxxx', // 新しいJRE Wallet LIFF IDに置き換え
-                external: false // LINE内で開く
+                url: 'https://test-liff-nu.vercel.app/jrewallet/',
+                external: true
             });
         } else {
             updateStatus('LINEアプリ内でのみ利用可能', 'error');
