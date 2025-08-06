@@ -160,7 +160,7 @@
             <p>環境: <span id="liff-context"></span></p>
             <p>バージョン: <span id="liff-version"></span></p>
             <div class="version">
-                アプリバージョン: 2.1.4
+                アプリバージョン: 2.1.5
             </div>
         </div>
     </div>
@@ -651,12 +651,8 @@
     
     // JRE Walletアプリを開く
     function openJREWallet() {
-        const url =
-            "jrewallet://?clientId=YOUR_CLIENT_ID" +
-            "&callbackUrl=dummy";
-
         if (liff.isInClient()) {
-            window.location.href = url;
+            window.location.href = "jrewallet://?event=home";
         } else {
             alert("LINEアプリ内でのみ利用できます");
         }
