@@ -1,4 +1,3 @@
-const flexMessage = require('./flex-message');
 const sampleFlexMessage = require('./sample-flex-message');
 
 module.exports = async (req, res) => {
