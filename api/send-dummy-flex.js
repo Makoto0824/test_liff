@@ -47,8 +47,9 @@ module.exports = async (req, res) => {
             },
             {
               "type": "image",
-              "url": "https://test-liff-nu.vercel.app/images/cat_fukidashi.png",
+              "url": "https://test-liff-nu.vercel.app/images/sample_fukidashi.png",
               "size": "full",
+              "aspectRatio": "256:81",
               "aspectMode": "cover",
               "margin": "none"
             }
