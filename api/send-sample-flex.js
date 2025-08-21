@@ -19,41 +19,15 @@ module.exports = async (req, res) => {
       return res.status(400).json({ error: 'userId is required' });
     }
 
-    // サンプル吹き出しFlex Message
-    const sampleMessage = {
+    // Flex Messageを読み込み
+    const sampleFlexMessage = require('./sample-flex-message.js');
+
+    // LINE Messaging APIで送信
+    await client.pushMessage(userId, {
       type: 'flex',
       altText: 'サンプル吹き出しメッセージ',
-      contents: {
-        "type": "bubble",
-        "body": {
-          "type": "box",
-          "layout": "vertical",
-          "contents": [
-            {
-              "type": "text",
-              "text": "これはサンプルの吹き出しメッセージです。",
-              "wrap": true,
-              "color": "#000000",
-              "size": "md",
-              "margin": "md"
-            },
-            {
-              "type": "image",
-              "url": "https://test-liff-nu.vercel.app/images/sample_fukidashi.png",
-              "size": "full",
-              "aspectRatio": "16:9",
-              "margin": "md"
-            }
-          ],
-          "paddingAll": "0px",
-          "paddingTop": "20px",
-          "paddingBottom": "0px"
-        }
-      }
-    };
-
-    // LINE Messaging APIでFlex Messageを送信
-    await client.pushMessage(userId, sampleMessage);
+      contents: sampleFlexMessage
+    });
 
     res.status(200).json({ 
       success: true, 
