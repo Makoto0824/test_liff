@@ -19,53 +19,15 @@ module.exports = async (req, res) => {
       return res.status(400).json({ error: 'userId is required' });
     }
 
-    // シンプルなテキストFlex Message（sample_fukidashi.png使用）
-    const dummyMessageV2 = {
+    // Flex Messageを読み込み
+    const dummyFlexV2Message = require('./dummy-flex-v2-message.js');
+
+    // LINE Messaging APIで送信
+    await client.pushMessage(userId, {
       type: 'flex',
       altText: 'ダミーテキスト V2',
-      contents: {
-        "type": "bubble",
-        "body": {
-          "type": "box",
-          "layout": "vertical",
-          "contents": [
-            {
-              "type": "box",
-              "layout": "vertical",
-              "contents": [
-                {
-                  "type": "text",
-                  "text": "これはダミーのテキストです。ここに文章が入ります。これはダミーのテキストです。ここに文章が入ります。これはダミーのテキストです。ここに文章が入ります。これはダミーのテキストです。ここに文章が入ります。",
-                  "size": "md",
-                  "color": "#666666",
-                  "wrap": true,
-                  "margin": "md"
-                }
-              ],
-              "paddingAll": "20px",
-              "paddingBottom": "0px"
-            },
-            {
-              "type": "image",
-              "url": "https://test-liff-nu.vercel.app/images/sample_fukidashi.png",
-              "size": "full",
-              "aspectMode": "cover",
-              "margin": "none"
-            }
-          ],
-          "paddingAll": "0px"
-        },
-        "footer": {
-          "type": "box",
-          "layout": "vertical",
-          "contents": [],
-          "paddingAll": "0px"
-        }
-      }
-    };
-
-    // LINE Messaging APIでFlex Messageを送信
-    await client.pushMessage(userId, dummyMessageV2);
+      contents: dummyFlexV2Message
+    });
 
     res.status(200).json({ 
       success: true, 
