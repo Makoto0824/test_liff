@@ -19,10 +19,10 @@ module.exports = async (req, res) => {
       return res.status(400).json({ error: 'userId is required' });
     }
 
-    // シンプルなテキストFlex Message
+    // シンプルなテキストFlex Message（sample_fukidashi.png使用）
     const dummyMessage = {
       type: 'flex',
-      altText: 'ダミーテキスト',
+      altText: 'ダミーテキスト v2',
       contents: {
         "type": "bubble",
         "body": {
@@ -47,7 +47,7 @@ module.exports = async (req, res) => {
             },
             {
               "type": "image",
-              "url": "https://test-liff-nu.vercel.app/images/cat_fukidashi.png",
+              "url": "https://test-liff-nu.vercel.app/images/sample_fukidashi.png",
               "size": "full",
               "aspectMode": "cover",
               "margin": "none"
@@ -69,14 +69,14 @@ module.exports = async (req, res) => {
 
     res.status(200).json({ 
       success: true, 
-      message: 'Dummy Flex Message sent successfully' 
+      message: 'Dummy Flex Message v2 sent successfully' 
     });
 
   } catch (error) {
-    console.error('Dummy Flex Message送信エラー:', error);
+    console.error('Dummy Flex Message v2送信エラー:', error);
     res.status(500).json({ 
-      error: 'Failed to send dummy Flex Message',
+      error: 'Failed to send dummy Flex Message v2',
       details: error.message 
     });
   }
-}; 
+};
