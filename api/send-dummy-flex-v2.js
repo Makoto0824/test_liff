@@ -20,9 +20,9 @@ module.exports = async (req, res) => {
     }
 
     // シンプルなテキストFlex Message（sample_fukidashi.png使用）
-    const dummyMessage = {
+    const dummyMessageV2 = {
       type: 'flex',
-      altText: 'ダミーテキスト v2',
+      altText: 'ダミーテキスト V2',
       contents: {
         "type": "bubble",
         "body": {
@@ -65,17 +65,17 @@ module.exports = async (req, res) => {
     };
 
     // LINE Messaging APIでFlex Messageを送信
-    await client.pushMessage(userId, dummyMessage);
+    await client.pushMessage(userId, dummyMessageV2);
 
     res.status(200).json({ 
       success: true, 
-      message: 'Dummy Flex Message v2 sent successfully' 
+      message: 'Dummy Flex Message V2 sent successfully' 
     });
 
   } catch (error) {
-    console.error('Dummy Flex Message v2送信エラー:', error);
+    console.error('Dummy Flex Message V2送信エラー:', error);
     res.status(500).json({ 
-      error: 'Failed to send dummy Flex Message v2',
+      error: 'Failed to send dummy Flex Message V2',
       details: error.message 
     });
   }

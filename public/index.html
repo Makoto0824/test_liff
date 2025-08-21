@@ -146,9 +146,6 @@
             <button class="btn" id="dummyButton" onclick="sendDummyMessage()" disabled>
                 📝 ダミーテキスト
             </button>
-            <button class="btn" id="dummyButtonV2" onclick="sendDummyMessageV2()" disabled>
-                📝 ダミーテキスト v2
-            </button>
             
             <button class="btn" id="walletButton" onclick="openWallet()" disabled>
                 💳 JRE Wallet Redirect Page
@@ -159,6 +156,9 @@
             </button>
             <button onclick="sendSampleFlexMessage()" class="btn btn-primary">
                 🎈 サンプル吹き出し
+            </button>
+            <button onclick="sendDummyFlexMessageV2()" class="btn btn-primary">
+                📝 ダミーテキスト V2
             </button>
         </div>
         
@@ -229,7 +229,6 @@
             document.getElementById('flexButton').disabled = false;
             document.getElementById('carouselButton').disabled = false;
             document.getElementById('dummyButton').disabled = false;
-            document.getElementById('dummyButtonV2').disabled = false;
             document.getElementById('walletButton').disabled = false;
             document.getElementById('jreWalletButton').disabled = false;
         }
@@ -643,35 +642,6 @@
         }
     }
 
-    // ダミーテキストFlex Message v2を送信
-    async function sendDummyFlexMessageV2() {
-        if (!liff.isLoggedIn()) {
-            alert('ログインしてください');
-            return;
-        }
-
-        try {
-            const response = await fetch('/api/send-dummy-flex-v2', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    userId: liff.getDecodedIDToken().sub
-                })
-            });
-
-            if (response.ok) {
-                alert('ダミーテキスト v2メッセージを送信しました！');
-            } else {
-                alert('メッセージ送信に失敗しました');
-            }
-        } catch (error) {
-            console.error('Error:', error);
-            alert('エラーが発生しました');
-        }
-    }
-
     // JRE Walletを開く
     function openWallet() {
         if (liff.isInClient()) {
@@ -714,6 +684,35 @@
 
             if (response.ok) {
                 alert('サンプル吹き出しメッセージを送信しました！');
+            } else {
+                alert('メッセージ送信に失敗しました');
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            alert('エラーが発生しました');
+        }
+    }
+
+    // ダミーテキストV2 Flex Messageを送信
+    async function sendDummyFlexMessageV2() {
+        if (!liff.isLoggedIn()) {
+            alert('ログインしてください');
+            return;
+        }
+
+        try {
+            const response = await fetch('/api/send-dummy-flex-v2', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    userId: liff.getDecodedIDToken().sub
+                })
+            });
+
+            if (response.ok) {
+                alert('ダミーテキストV2メッセージを送信しました！');
             } else {
                 alert('メッセージ送信に失敗しました');
             }
