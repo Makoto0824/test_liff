@@ -92,7 +92,7 @@ async function handlePostback(event, accessToken) {
                 };
         }
     } else if (data.includes('flex_message=dummy')) {
-        // ダミーテキストメッセージと画像のpostback処理
+        // ダミーテキストメッセージとフレックス画像のpostback処理
         const messages = [
             {
                 type: 'text',
@@ -107,9 +107,25 @@ async function handlePostback(event, accessToken) {
                 text: 'これはダミーテキストです。ここに文章が入ります。'
             },
             {
-                type: 'image',
-                originalContentUrl: 'https://test-liff-nu.vercel.app/images/cat_sample0826.png',
-                previewImageUrl: 'https://test-liff-nu.vercel.app/images/cat_sample0826.png'
+                type: 'flex',
+                altText: '猫の画像',
+                contents: {
+                    "type": "bubble",
+                    "body": {
+                        "type": "box",
+                        "layout": "vertical",
+                        "contents": [
+                            {
+                                "type": "image",
+                                "url": "https://test-liff-nu.vercel.app/images/cat_sample0826.png",
+                                "size": "full",
+                                "aspectRatio": "1:3",
+                                "aspectMode": "cover"
+                            }
+                        ],
+                        "paddingAll": "0px"
+                    }
+                }
             }
         ];
         
@@ -240,9 +256,25 @@ async function handleMessage(event, accessToken) {
                 text: 'これはダミーテキストです。ここに文章が入ります。'
             },
             {
-                type: 'image',
-                originalContentUrl: 'https://test-liff-nu.vercel.app/images/cat_sample0826.png',
-                previewImageUrl: 'https://test-liff-nu.vercel.app/images/cat_sample0826.png'
+                type: 'flex',
+                altText: '猫の画像',
+                contents: {
+                    "type": "bubble",
+                    "body": {
+                        "type": "box",
+                        "layout": "vertical",
+                        "contents": [
+                            {
+                                "type": "image",
+                                "url": "https://test-liff-nu.vercel.app/images/cat_sample0826.png",
+                                "size": "full",
+                                "aspectRatio": "1:3",
+                                "aspectMode": "cover"
+                            }
+                        ],
+                        "paddingAll": "0px"
+                    }
+                }
             }
         ];
         
