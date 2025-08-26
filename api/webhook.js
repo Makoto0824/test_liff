@@ -199,21 +199,69 @@ async function handleMessage(event, accessToken) {
         
         // 他のトリガーワードも簡単に追加可能
         // 'トリガーワード': '返信メッセージ',
-        // 'こんにちは': 'こんにちは！元気ですか？',
         // 'おつかれ': 'お疲れ様です！'
     };
     
     // トリガーワードをチェック
     let replyMessage = null;
     
-    for (const [trigger, response] of Object.entries(triggerResponses)) {
-        if (userMessage === trigger || userMessage.includes(trigger)) {
-            replyMessage = {
-                type: 'text',
-                text: response
-            };
-            console.log(`Triggered by: "${trigger}" -> Response: "${response}"`);
-            break;
+    // 「こんにちは」の場合はフレックスメッセージを送信
+    if (userMessage === 'こんにちは' || userMessage.includes('こんにちは')) {
+        replyMessage = {
+            type: 'flex',
+            altText: 'ダミーテキスト',
+            contents: {
+                "type": "bubble",
+                "body": {
+                    "type": "box",
+                    "layout": "vertical",
+                    "contents": [
+                        {
+                            "type": "box",
+                            "layout": "vertical",
+                            "contents": [
+                                {
+                                    "type": "text",
+                                    "text": "これはダミーのテキストです。ここに文章が入ります。これはダミーのテキストです。ここに文章が入ります。これはダミーのテキストです。ここに文章が入ります。これはダミーのテキストです。ここに文章が入ります。",
+                                    "size": "md",
+                                    "color": "#666666",
+                                    "wrap": true,
+                                    "margin": "md"
+                                }
+                            ],
+                            "paddingAll": "20px"
+                        },
+                        {
+                            "type": "image",
+                            "url": "https://test-liff-nu.vercel.app/images/cat_sample0826.png",
+                            "size": "full",
+                            "aspectRatio": "128:381",
+                            "aspectMode": "cover",
+                            "margin": "none"
+                        }
+                    ],
+                    "paddingAll": "0px"
+                },
+                "footer": {
+                    "type": "box",
+                    "layout": "vertical",
+                    "contents": [],
+                    "paddingAll": "0px"
+                }
+            }
+        };
+        console.log('Triggered by: "こんにちは" -> Flex Message');
+    } else {
+        // その他のトリガーワードをチェック
+        for (const [trigger, response] of Object.entries(triggerResponses)) {
+            if (userMessage === trigger || userMessage.includes(trigger)) {
+                replyMessage = {
+                    type: 'text',
+                    text: response
+                };
+                console.log(`Triggered by: "${trigger}" -> Response: "${response}"`);
+                break;
+            }
         }
     }
     
