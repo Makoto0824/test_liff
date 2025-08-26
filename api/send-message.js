@@ -55,7 +55,7 @@ export default async function handler(req, res) {
                         {
                             type: 'postback',
                             label: '☀️ こんにちは',
-                            data: 'greeting=afternoon',
+                            data: 'flex_message=dummy',
                             displayText: 'こんにちは'
                         },
                         {
