@@ -92,50 +92,30 @@ async function handlePostback(event, accessToken) {
                 };
         }
     } else if (data.includes('flex_message=dummy')) {
-        // ダミーテキストフレックスメッセージのpostback処理
-        replyMessage = {
-            type: 'flex',
-            altText: 'ダミーテキスト',
-            contents: {
-                "type": "bubble",
-                "body": {
-                    "type": "box",
-                    "layout": "vertical",
-                    "contents": [
-                        {
-                            "type": "box",
-                            "layout": "vertical",
-                            "contents": [
-                                {
-                                    "type": "text",
-                                    "text": "これはダミーのテキストです。ここに文章が入ります。これはダミーのテキストです。ここに文章が入ります。これはダミーのテキストです。ここに文章が入ります。これはダミーのテキストです。ここに文章が入ります。",
-                                    "size": "md",
-                                    "color": "#666666",
-                                    "wrap": true,
-                                    "margin": "md"
-                                }
-                            ],
-                            "paddingAll": "20px"
-                        },
-                        {
-                            "type": "image",
-                            "url": "https://test-liff-nu.vercel.app/images/cat_sample0826.png",
-                            "size": "full",
-                            "aspectRatio": "128:381",
-                            "aspectMode": "cover",
-                            "margin": "none"
-                        }
-                    ],
-                    "paddingAll": "0px"
-                },
-                "footer": {
-                    "type": "box",
-                    "layout": "vertical",
-                    "contents": [],
-                    "paddingAll": "0px"
-                }
+        // ダミーテキストメッセージと画像のpostback処理
+        const messages = [
+            {
+                type: 'text',
+                text: 'これはダミーテキストです。ここに文章が入ります。'
+            },
+            {
+                type: 'text',
+                text: 'これはダミーテキストです。ここに文章が入ります。'
+            },
+            {
+                type: 'text',
+                text: 'これはダミーテキストです。ここに文章が入ります。'
+            },
+            {
+                type: 'image',
+                originalContentUrl: 'https://test-liff-nu.vercel.app/images/cat_sample0826.png',
+                previewImageUrl: 'https://test-liff-nu.vercel.app/images/cat_sample0826.png'
             }
-        };
+        ];
+        
+        // 複数のメッセージを順番に送信
+        await sendMessage(userId, messages, accessToken);
+        return; // 個別に送信するので、ここで処理を終了
     } else if (data.includes('copy_url=')) {
         // URLコピーのpostback処理
         const url = decodeURIComponent(data.split('=')[1]);
@@ -244,52 +224,32 @@ async function handleMessage(event, accessToken) {
     // トリガーワードをチェック
     let replyMessage = null;
     
-    // 「こんにちは」の場合はフレックスメッセージを送信
+    // 「こんにちは」の場合は複数のメッセージを送信
     if (userMessage === 'こんにちは' || userMessage.includes('こんにちは')) {
-        replyMessage = {
-            type: 'flex',
-            altText: 'ダミーテキスト',
-            contents: {
-                "type": "bubble",
-                "body": {
-                    "type": "box",
-                    "layout": "vertical",
-                    "contents": [
-                        {
-                            "type": "box",
-                            "layout": "vertical",
-                            "contents": [
-                                {
-                                    "type": "text",
-                                    "text": "これはダミーのテキストです。ここに文章が入ります。これはダミーのテキストです。ここに文章が入ります。これはダミーのテキストです。ここに文章が入ります。これはダミーのテキストです。ここに文章が入ります。",
-                                    "size": "md",
-                                    "color": "#666666",
-                                    "wrap": true,
-                                    "margin": "md"
-                                }
-                            ],
-                            "paddingAll": "20px"
-                        },
-                        {
-                            "type": "image",
-                            "url": "https://test-liff-nu.vercel.app/images/cat_sample0826.png",
-                            "size": "full",
-                            "aspectRatio": "128:381",
-                            "aspectMode": "cover",
-                            "margin": "none"
-                        }
-                    ],
-                    "paddingAll": "0px"
-                },
-                "footer": {
-                    "type": "box",
-                    "layout": "vertical",
-                    "contents": [],
-                    "paddingAll": "0px"
-                }
+        const messages = [
+            {
+                type: 'text',
+                text: 'これはダミーテキストです。ここに文章が入ります。'
+            },
+            {
+                type: 'text',
+                text: 'これはダミーテキストです。ここに文章が入ります。'
+            },
+            {
+                type: 'text',
+                text: 'これはダミーテキストです。ここに文章が入ります。'
+            },
+            {
+                type: 'image',
+                originalContentUrl: 'https://test-liff-nu.vercel.app/images/cat_sample0826.png',
+                previewImageUrl: 'https://test-liff-nu.vercel.app/images/cat_sample0826.png'
             }
-        };
-        console.log('Triggered by: "こんにちは" -> Flex Message');
+        ];
+        
+        // 複数のメッセージを順番に送信
+        await sendMessage(userId, messages, accessToken);
+        console.log('Triggered by: "こんにちは" -> Multiple Messages');
+        return; // 個別に送信するので、ここで処理を終了
     } else {
         // その他のトリガーワードをチェック
         for (const [trigger, response] of Object.entries(triggerResponses)) {
