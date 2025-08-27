@@ -117,7 +117,7 @@ async function handlePostback(event, accessToken) {
                         "contents": [
                             {
                                 "type": "image",
-                                "url": "https://test-liff-nu.vercel.app/images/cat_sample512_1524.png",
+                                "url": "https://test-liff-nu.vercel.app/images/catrip_50.jpg",
                                 "size": "full",
                                 "aspectRatio": "128:381",
                                 "aspectMode": "cover"
@@ -266,7 +266,7 @@ async function handleMessage(event, accessToken) {
                         "contents": [
                             {
                                 "type": "image",
-                                "url": "https://test-liff-nu.vercel.app/images/cat_sample512_1524.png",
+                                "url": "https://test-liff-nu.vercel.app/images/catrip_50.jpg",
                                 "size": "full",
                                 "aspectRatio": "128:381",
                                 "aspectMode": "cover"
