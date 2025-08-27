@@ -119,7 +119,7 @@ async function handlePostback(event, accessToken) {
                                 "type": "image",
                                 "url": "https://test-liff-nu.vercel.app/images/cat_sample512_1524.png",
                                 "size": "full",
-                                "aspectRatio": "1:3",
+                                "aspectRatio": "128:381",
                                 "aspectMode": "cover"
                             }
                         ],
@@ -268,7 +268,7 @@ async function handleMessage(event, accessToken) {
                                 "type": "image",
                                 "url": "https://test-liff-nu.vercel.app/images/cat_sample512_1524.png",
                                 "size": "full",
-                                "aspectRatio": "1:3",
+                                "aspectRatio": "128:381",
                                 "aspectMode": "cover"
                             }
                         ],
