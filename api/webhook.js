@@ -103,10 +103,6 @@ async function handlePostback(event, accessToken) {
                 text: 'これはダミーテキストです。ここに文章が入ります。'
             },
             {
-                type: 'text',
-                text: 'これはダミーテキストです。ここに文章が入ります。'
-            },
-            {
                 type: 'flex',
                 altText: '猫の画像',
                 contents: {
@@ -117,7 +113,7 @@ async function handlePostback(event, accessToken) {
                         "contents": [
                             {
                                 "type": "image",
-                                "url": "https://test-liff-nu.vercel.app/images/catrip_50_2.jpg",
+                                "url": "https://test-liff-nu.vercel.app/images/catrip_50_3.jpg",
                                 "size": "full",
                                 "aspectRatio": "128:381",
                                 "aspectMode": "cover"
@@ -126,6 +122,14 @@ async function handlePostback(event, accessToken) {
                         "paddingAll": "0px"
                     }
                 }
+            },
+            {
+                type: 'text',
+                text: 'これはダミーテキストです。ここに文章が入ります。'
+            },
+            {
+                type: 'text',
+                text: 'これはダミーテキストです。ここに文章が入ります。'
             }
         ];
         
@@ -252,10 +256,6 @@ async function handleMessage(event, accessToken) {
                 text: 'これはダミーテキストです。ここに文章が入ります。'
             },
             {
-                type: 'text',
-                text: 'これはダミーテキストです。ここに文章が入ります。'
-            },
-            {
                 type: 'flex',
                 altText: '猫の画像',
                 contents: {
@@ -266,7 +266,7 @@ async function handleMessage(event, accessToken) {
                         "contents": [
                             {
                                 "type": "image",
-                                "url": "https://test-liff-nu.vercel.app/images/catrip_50_2.jpg",
+                                "url": "https://test-liff-nu.vercel.app/images/catrip_50_3.jpg",
                                 "size": "full",
                                 "aspectRatio": "128:381",
                                 "aspectMode": "cover"
@@ -275,6 +275,14 @@ async function handleMessage(event, accessToken) {
                         "paddingAll": "0px"
                     }
                 }
+            },
+            {
+                type: 'text',
+                text: 'これはダミーテキストです。ここに文章が入ります。'
+            },
+            {
+                type: 'text',
+                text: 'これはダミーテキストです。ここに文章が入ります。'
             }
         ];
         
