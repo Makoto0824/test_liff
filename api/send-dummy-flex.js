@@ -46,9 +46,9 @@ module.exports = async (req, res) => {
             },
             {
               "type": "image",
-              "url": "https://test-liff-nu.vercel.app/images/catrip_50_4.jpg",
+              "url": "https://test-liff-nu.vercel.app/images/catrip_test_nobi_A.jpg",
               "size": "full",
-              "aspectRatio": "128:381",
+              "aspectRatio": "256:171",
               "aspectMode": "cover",
               "margin": "none"
             }

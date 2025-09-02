@@ -104,7 +104,7 @@ async function handlePostback(event, accessToken) {
             },
             {
                 type: 'flex',
-                altText: '猫の画像',
+                altText: '猫の画像A',
                 contents: {
                     "type": "bubble",
                     "body": {
@@ -113,9 +113,9 @@ async function handlePostback(event, accessToken) {
                         "contents": [
                             {
                                 "type": "image",
-                                "url": "https://test-liff-nu.vercel.app/images/catrip_50_4.jpg",
+                                "url": "https://test-liff-nu.vercel.app/images/catrip_test_nobi_A.jpg",
                                 "size": "full",
-                                "aspectRatio": "128:381",
+                                "aspectRatio": "256:171",
                                 "aspectMode": "cover"
                             }
                         ],
@@ -124,12 +124,46 @@ async function handlePostback(event, accessToken) {
                 }
             },
             {
-                type: 'text',
-                text: 'これはダミーテキストです。ここに文章が入ります。'
+                type: 'flex',
+                altText: '猫の画像B',
+                contents: {
+                    "type": "bubble",
+                    "body": {
+                        "type": "box",
+                        "layout": "vertical",
+                        "contents": [
+                            {
+                                "type": "image",
+                                "url": "https://test-liff-nu.vercel.app/images/catrip_test_nobi_B.jpg",
+                                "size": "full",
+                                "aspectRatio": "256:327",
+                                "aspectMode": "cover"
+                            }
+                        ],
+                        "paddingAll": "0px"
+                    }
+                }
             },
             {
-                type: 'text',
-                text: 'これはダミーテキストです。ここに文章が入ります。'
+                type: 'flex',
+                altText: '猫の画像C',
+                contents: {
+                    "type": "bubble",
+                    "body": {
+                        "type": "box",
+                        "layout": "vertical",
+                        "contents": [
+                            {
+                                "type": "image",
+                                "url": "https://test-liff-nu.vercel.app/images/catrip_test_nobi_C.jpg",
+                                "size": "full",
+                                "aspectRatio": "32:33",
+                                "aspectMode": "cover"
+                            }
+                        ],
+                        "paddingAll": "0px"
+                    }
+                }
             }
         ];
         
@@ -257,7 +291,7 @@ async function handleMessage(event, accessToken) {
             },
             {
                 type: 'flex',
-                altText: '猫の画像',
+                altText: '猫の画像A',
                 contents: {
                     "type": "bubble",
                     "body": {
@@ -266,9 +300,9 @@ async function handleMessage(event, accessToken) {
                         "contents": [
                             {
                                 "type": "image",
-                                "url": "https://test-liff-nu.vercel.app/images/catrip_50_4.jpg",
+                                "url": "https://test-liff-nu.vercel.app/images/catrip_test_nobi_A.jpg",
                                 "size": "full",
-                                "aspectRatio": "128:381",
+                                "aspectRatio": "256:171",
                                 "aspectMode": "cover"
                             }
                         ],
@@ -277,12 +311,46 @@ async function handleMessage(event, accessToken) {
                 }
             },
             {
-                type: 'text',
-                text: 'これはダミーテキストです。ここに文章が入ります。'
+                type: 'flex',
+                altText: '猫の画像B',
+                contents: {
+                    "type": "bubble",
+                    "body": {
+                        "type": "box",
+                        "layout": "vertical",
+                        "contents": [
+                            {
+                                "type": "image",
+                                "url": "https://test-liff-nu.vercel.app/images/catrip_test_nobi_B.jpg",
+                                "size": "full",
+                                "aspectRatio": "256:327",
+                                "aspectMode": "cover"
+                            }
+                        ],
+                        "paddingAll": "0px"
+                    }
+                }
             },
             {
-                type: 'text',
-                text: 'これはダミーテキストです。ここに文章が入ります。'
+                type: 'flex',
+                altText: '猫の画像C',
+                contents: {
+                    "type": "bubble",
+                    "body": {
+                        "type": "box",
+                        "layout": "vertical",
+                        "contents": [
+                            {
+                                "type": "image",
+                                "url": "https://test-liff-nu.vercel.app/images/catrip_test_nobi_C.jpg",
+                                "size": "full",
+                                "aspectRatio": "32:33",
+                                "aspectMode": "cover"
+                            }
+                        ],
+                        "paddingAll": "0px"
+                    }
+                }
             }
         ];
         
