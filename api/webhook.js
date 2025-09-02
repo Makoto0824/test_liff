@@ -113,7 +113,7 @@ async function handlePostback(event, accessToken) {
                         "contents": [
                             {
                                 "type": "image",
-                                "url": "https://test-liff-nu.vercel.app/images/0902/catrip_test_nobi_A.jpg",
+                                "url": "https://test-liff-nu.vercel.app/images/0902/catrip_test_nobi_A1.jpg",
                                 "size": "full",
                                 "aspectRatio": "256:171",
                                 "aspectMode": "cover"
@@ -134,7 +134,7 @@ async function handlePostback(event, accessToken) {
                         "contents": [
                             {
                                 "type": "image",
-                                "url": "https://test-liff-nu.vercel.app/images/0902/catrip_test_nobi_B.jpg",
+                                "url": "https://test-liff-nu.vercel.app/images/0902/catrip_test_nobi_B1.jpg",
                                 "size": "full",
                                 "aspectRatio": "256:327",
                                 "aspectMode": "cover"
@@ -155,7 +155,7 @@ async function handlePostback(event, accessToken) {
                         "contents": [
                             {
                                 "type": "image",
-                                "url": "https://test-liff-nu.vercel.app/images/0902/catrip_test_nobi_C.jpg",
+                                "url": "https://test-liff-nu.vercel.app/images/0902/catrip_test_nobi_C1.jpg",
                                 "size": "full",
                                 "aspectRatio": "32:33",
                                 "aspectMode": "cover"
@@ -300,7 +300,7 @@ async function handleMessage(event, accessToken) {
                         "contents": [
                             {
                                 "type": "image",
-                                "url": "https://test-liff-nu.vercel.app/images/0902/catrip_test_nobi_A.jpg",
+                                "url": "https://test-liff-nu.vercel.app/images/0902/catrip_test_nobi_A1.jpg",
                                 "size": "full",
                                 "aspectRatio": "256:171",
                                 "aspectMode": "cover"
@@ -321,7 +321,7 @@ async function handleMessage(event, accessToken) {
                         "contents": [
                             {
                                 "type": "image",
-                                "url": "https://test-liff-nu.vercel.app/images/0902/catrip_test_nobi_B.jpg",
+                                "url": "https://test-liff-nu.vercel.app/images/0902/catrip_test_nobi_B1.jpg",
                                 "size": "full",
                                 "aspectRatio": "256:327",
                                 "aspectMode": "cover"
@@ -342,7 +342,7 @@ async function handleMessage(event, accessToken) {
                         "contents": [
                             {
                                 "type": "image",
-                                "url": "https://test-liff-nu.vercel.app/images/0902/catrip_test_nobi_C.jpg",
+                                "url": "https://test-liff-nu.vercel.app/images/0902/catrip_test_nobi_C1.jpg",
                                 "size": "full",
                                 "aspectRatio": "32:33",
                                 "aspectMode": "cover"
